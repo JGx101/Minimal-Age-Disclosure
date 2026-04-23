@@ -5,7 +5,9 @@
   "expected_conformance": false,
   "expected_failure_class": "exception_governance_failure",
   "object": {
-    "object_type": "age_exception_request",
+    "object_type": "age_threshold_exception_request",
+    "object_version": "1.0",
+    "profile_ref": "Profile R",
     "exception_requested": true,
     "base_request_ref": "case-ref-without-normal-path-evidence",
     "verifier_id": "https://standard-verifier.example",

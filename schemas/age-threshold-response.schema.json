@@ -1,0 +1,48 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://minimal-age-disclosure.example/schemas/age-threshold-response.schema.json",
+  "title": "Age Threshold Response",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "object_type",
+    "object_version",
+    "profile_ref",
+    "threshold_result",
+    "assurance_bucket",
+    "issuer_class",
+    "issuer_trust_ref",
+    "validity_window",
+    "audience_binding",
+    "nonce_binding",
+    "binding_mode",
+    "possession_proof",
+    "status_evidence",
+    "proof_format_ref"
+  ],
+  "properties": {
+    "object_type": { "const": "age_threshold_response" },
+    "object_version": { "const": "1.0" },
+    "profile_ref": { "enum": ["Profile R", "Profile P"] },
+    "threshold_result": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["threshold", "satisfied", "result_code"],
+      "properties": {
+        "threshold": { "enum": ["over_13", "over_16", "over_18", "over_21"] },
+        "satisfied": { "type": "boolean" },
+        "result_code": { "enum": ["threshold_satisfied", "threshold_not_satisfied"] }
+      }
+    },
+    "assurance_bucket": { "enum": ["AB1", "AB2", "AB3"] },
+    "issuer_class": { "enum": ["A0", "A1", "A2"] },
+    "issuer_trust_ref": { "type": "object" },
+    "validity_window": { "type": "object" },
+    "audience_binding": { "const": "present" },
+    "nonce_binding": { "const": "present" },
+    "binding_mode": { "enum": ["B0", "B1", "B2"] },
+    "possession_proof": { "type": ["object", "string"] },
+    "status_evidence": { "type": "object" },
+    "proof_format_ref": { "type": "object" }
+  }
+}

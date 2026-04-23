@@ -510,6 +510,8 @@ Where an exception-governance transport or audit envelope uses additional govern
 | `object_type` | string | Yes | `age_threshold_exception_request` | `RC1` |
 | `object_version` | string | Yes | `major.minor`; this version is `1.0` | `RC1` |
 | `profile_ref` | string | Yes | `Profile R`, `Profile P`, or governed derived profile reference | `RC1` |
+| `base_request_ref` | string | Yes | Hash or governed reference binding the exceptional request to the normal-flow request, transaction, policy decision, or refusal | `RC1` |
+| `verifier_id` | string | Yes | Public verifier identifier | `RC1` |
 | `verifier_class` | string | Yes | `V2` or `VX`; `V1` is non-conformant | `RC1` |
 | `requested_threshold` | string | Optional | Supported threshold claim, where threshold proof remains part of the flow | `RC1` |
 | `audience` | string | Yes | Verifier audience URI or governed audience identifier | `RC0` |
@@ -518,13 +520,18 @@ Where an exception-governance transport or audit envelope uses additional govern
 | `policy_ref` | string | Yes | Public policy, service rule, or governance reference | `RC1` |
 | `jurisdiction_ref` | string | Yes | Governing jurisdiction or policy context | `RC1` |
 | `exception_requested` | boolean | Yes | `true` | `RC1` |
+| `use_case_code` | string | Yes | Governed exceptional use case code | `RC1` |
+| `lawful_basis_code` | string | Yes | Controlled lawful-basis code from exception governance | `RC1` |
 | `lawful_basis_ref` | string | Yes | Public lawful-basis or governance reference | `RC1` |
 | `requested_extra_fields` | array of strings | Yes | Minimum fields needed for the exceptional purpose | `RC2`; values forbidden in normal flow are `RC3` there |
-| `necessity_explanation` | string | Yes | Human-reviewable explanation for why normal flow is insufficient | `RC1` |
+| `field_necessity_map` | object | Yes | Mapping from each requested extra field to the governing rule and lawful-basis reference that requires it | `RC1` |
+| `normal_path_insufficiency` | object | Yes | Structured result proving the normal path cannot satisfy the governing rule | `RC1` |
 | `retention_period` | object | Yes | See section 8.3 | `RC1` |
+| `evidence_handling` | string | Yes | `transient_inspection_only`, `retain_redacted_exception_record`, `retain_declared_extra_fields`, or `refused_no_extra_evidence` | `RC1` |
 | `audit_contact` | string | Yes | Public audit contact URI, email, or governance endpoint | `RC1` |
 | `review_or_appeal_ref` | string | Yes | Public review, appeal, or redress reference | `RC1` |
 | `normal_flow_unavailable_reason` | string | Yes | See section 8.2 | `RC1` |
+| `request_expiry` | string | Yes | Bounded expiry value or governed expiry reference | `RC1` |
 | `exception_class_ref` | string | Optional | Governance-approved scoped exception class | `RC1` |
 
 ### 8.2 Exceptional request field rules
@@ -550,6 +557,12 @@ Any `V1` exceptional request is non-conformant.
 
 An exceptional request with missing, vague, internally inconsistent, or non-public lawful-basis fields MUST be refused by the wallet.
 
+`base_request_ref` MUST bind the exceptional request to the normal-flow request, transaction, policy decision, or refusal that led to the exceptional path. It MUST NOT be a stable holder identifier.
+
+`field_necessity_map` MUST include one entry for every value in `requested_extra_fields`.
+
+`normal_path_insufficiency` MUST record the structured result of the exception-governance normal-path insufficiency test.
+
 ### 8.3 `retention_period`
 `retention_period` MUST be an object with this structure:
 
@@ -566,16 +579,23 @@ An exceptional request with missing, vague, internally inconsistent, or non-publ
 | `object_version` | string | Yes | `major.minor`; this version is `1.0` | `RC1` |
 | `normal_flow_conformance` | boolean | Yes | `false` | `RC1` |
 | `profile_ref` | string | Yes | Request profile or governed compatible profile | `RC1` |
+| `base_request_ref` | string | Yes | Echoes the exceptional request binding reference | `RC1` |
+| `verifier_id` | string | Yes | Echoes the verifier identifier from the accepted exceptional request | `RC1` |
 | `audience_binding` | string | Yes | `present` | `RC0` |
 | `nonce_binding` | string | Yes | `present` | `RC0` |
+| `lawful_basis_code` | string | Yes | Echoes accepted exceptional request | `RC1` |
 | `lawful_basis_ref` | string | Yes | Echoes accepted exceptional request | `RC1` |
 | `jurisdiction_ref` | string | Yes | Echoes accepted exceptional request | `RC1` |
 | `purpose` | string | Yes | Echoes accepted exceptional request | `RC1` |
 | `retention_period` | object | Yes | Echoes accepted exceptional request | `RC1` |
 | `red_path_confirmation` | object | Yes | `shown: true`, `holder_action: approved`, and confirmed field names | `RC1` |
 | `disclosed_fields` | object | Yes | Only approved exceptional fields and values | `RC2`; raw root credential material is `RC3` unless explicitly approved |
+| `withheld_fields` | array of strings | Yes | Fields refused, unavailable, or blocked by wallet policy without values | `RC1` |
+| `holder_decision` | string | Yes | `accepted_all`, `accepted_partial`, `refused`, or `cancelled` | `RC1` |
+| `retention_notice_acknowledged` | boolean | Yes | Whether the holder acknowledged the retention notice where required | `RC1` |
 | `disclosure_scope` | array of strings | Yes | Names of disclosed fields | `RC1` |
 | `review_or_appeal_ref` | string | Yes | Echoes accepted exceptional request | `RC1` |
+| `response_expiry` | string | Yes | Bounded expiry value or governed expiry reference | `RC1` |
 | `audit_event_ref` | string | Optional | Verifier-local or governance audit reference, not holder-specific across verifiers | `RC1` |
 
 An exceptional response MUST NOT claim normal-flow conformance.
@@ -589,11 +609,13 @@ An exceptional response MUST NOT include fields beyond the approved `requested_e
   "$id": "https://minimal-disclosure-age-proof.example/schemas/age-threshold-exception-request-1.0.json",
   "type": "object",
   "additionalProperties": false,
-  "required": ["object_type", "object_version", "profile_ref", "verifier_class", "audience", "nonce", "purpose", "policy_ref", "jurisdiction_ref", "exception_requested", "lawful_basis_ref", "requested_extra_fields", "necessity_explanation", "retention_period", "audit_contact", "review_or_appeal_ref", "normal_flow_unavailable_reason"],
+  "required": ["object_type", "object_version", "profile_ref", "base_request_ref", "verifier_id", "verifier_class", "audience", "nonce", "purpose", "policy_ref", "jurisdiction_ref", "exception_requested", "use_case_code", "lawful_basis_code", "lawful_basis_ref", "requested_extra_fields", "field_necessity_map", "normal_path_insufficiency", "retention_period", "evidence_handling", "audit_contact", "review_or_appeal_ref", "normal_flow_unavailable_reason", "request_expiry"],
   "properties": {
     "object_type": { "const": "age_threshold_exception_request" },
     "object_version": { "type": "string", "pattern": "^[1-9][0-9]*\\.[0-9]+$" },
     "profile_ref": { "type": "string", "minLength": 1 },
+    "base_request_ref": { "type": "string", "minLength": 1 },
+    "verifier_id": { "type": "string", "minLength": 1 },
     "verifier_class": { "enum": ["V2", "VX"] },
     "requested_threshold": { "type": "string", "pattern": "^over_[0-9]+$" },
     "audience": { "type": "string", "minLength": 1 },
@@ -602,13 +624,18 @@ An exceptional response MUST NOT include fields beyond the approved `requested_e
     "policy_ref": { "type": "string", "minLength": 1 },
     "jurisdiction_ref": { "type": "string", "minLength": 1 },
     "exception_requested": { "const": true },
+    "use_case_code": { "type": "string", "minLength": 1 },
+    "lawful_basis_code": { "enum": ["statutory_age_or_access_rule", "regulator_mandated_step_up", "legal_claim_or_dispute", "fraud_or_security_investigation", "holder_requested_support", "safety_emergency", "legal_process_or_court_order", "governance_approved_research_or_audit"] },
     "lawful_basis_ref": { "type": "string", "minLength": 1 },
     "requested_extra_fields": { "type": "array", "minItems": 1, "uniqueItems": true, "items": { "enum": ["legal_name", "exact_dob", "document_number", "document_image", "issuer_identity", "root_credential_disclosure", "identity_evidence", "account_linkage_evidence", "other_governed"] } },
-    "necessity_explanation": { "type": "string", "minLength": 1 },
+    "field_necessity_map": { "type": "object", "minProperties": 1 },
+    "normal_path_insufficiency": { "type": "object", "minProperties": 1 },
     "retention_period": { "$ref": "#/$defs/retention_period" },
+    "evidence_handling": { "enum": ["transient_inspection_only", "retain_redacted_exception_record", "retain_declared_extra_fields", "refused_no_extra_evidence"] },
     "audit_contact": { "type": "string", "minLength": 1 },
     "review_or_appeal_ref": { "type": "string", "minLength": 1 },
     "normal_flow_unavailable_reason": { "enum": ["governing_rule_requires_extra_data", "normal_proof_failed_governed_step_up", "fraud_or_safety_governed_review", "manual_review_required", "other_governed"] },
+    "request_expiry": { "type": "string", "minLength": 1 },
     "exception_class_ref": { "type": "string", "minLength": 1 }
   },
   "$defs": {
@@ -632,14 +659,17 @@ An exceptional response MUST NOT include fields beyond the approved `requested_e
   "$id": "https://minimal-disclosure-age-proof.example/schemas/age-threshold-exception-response-1.0.json",
   "type": "object",
   "additionalProperties": false,
-  "required": ["object_type", "object_version", "normal_flow_conformance", "profile_ref", "audience_binding", "nonce_binding", "lawful_basis_ref", "jurisdiction_ref", "purpose", "retention_period", "red_path_confirmation", "disclosed_fields", "disclosure_scope", "review_or_appeal_ref"],
+  "required": ["object_type", "object_version", "normal_flow_conformance", "profile_ref", "base_request_ref", "verifier_id", "audience_binding", "nonce_binding", "lawful_basis_code", "lawful_basis_ref", "jurisdiction_ref", "purpose", "retention_period", "red_path_confirmation", "disclosed_fields", "withheld_fields", "holder_decision", "retention_notice_acknowledged", "disclosure_scope", "review_or_appeal_ref", "response_expiry"],
   "properties": {
     "object_type": { "const": "age_threshold_exception_response" },
     "object_version": { "type": "string", "pattern": "^[1-9][0-9]*\\.[0-9]+$" },
     "normal_flow_conformance": { "const": false },
     "profile_ref": { "type": "string", "minLength": 1 },
+    "base_request_ref": { "type": "string", "minLength": 1 },
+    "verifier_id": { "type": "string", "minLength": 1 },
     "audience_binding": { "const": "present" },
     "nonce_binding": { "const": "present" },
+    "lawful_basis_code": { "type": "string", "minLength": 1 },
     "lawful_basis_ref": { "type": "string", "minLength": 1 },
     "jurisdiction_ref": { "type": "string", "minLength": 1 },
     "purpose": { "type": "string", "minLength": 1 },
@@ -655,8 +685,12 @@ An exceptional response MUST NOT include fields beyond the approved `requested_e
       }
     },
     "disclosed_fields": { "type": "object" },
+    "withheld_fields": { "type": "array", "items": { "type": "string", "minLength": 1 } },
+    "holder_decision": { "enum": ["accepted_all", "accepted_partial", "refused", "cancelled"] },
+    "retention_notice_acknowledged": { "type": "boolean" },
     "disclosure_scope": { "type": "array", "minItems": 1, "uniqueItems": true, "items": { "type": "string", "minLength": 1 } },
     "review_or_appeal_ref": { "type": "string", "minLength": 1 },
+    "response_expiry": { "type": "string", "minLength": 1 },
     "audit_event_ref": { "type": "string", "minLength": 1 }
   }
 }
@@ -789,6 +823,8 @@ An exceptional response MUST NOT include fields beyond the approved `requested_e
   "object_type": "age_threshold_exception_request",
   "object_version": "1.0",
   "profile_ref": "Profile R",
+  "base_request_ref": "sha256:normal-request-transcript-hash",
+  "verifier_id": "https://exceptional-verifier.test",
   "verifier_class": "VX",
   "requested_threshold": "over_18",
   "audience": "https://exceptional-verifier.test",
@@ -797,17 +833,28 @@ An exceptional response MUST NOT include fields beyond the approved `requested_e
   "policy_ref": "regulated-service-manual-review",
   "jurisdiction_ref": "GB",
   "exception_requested": true,
+  "use_case_code": "manual_review_required",
+  "lawful_basis_code": "regulator_mandated_step_up",
   "lawful_basis_ref": "gb-regulated-review-basis",
   "requested_extra_fields": ["legal_name", "exact_dob"],
-  "necessity_explanation": "Normal threshold proof cannot satisfy this governed manual review.",
+  "field_necessity_map": {
+    "legal_name": "required by lawful_basis_ref for this governed manual review",
+    "exact_dob": "required by lawful_basis_ref for this governed manual review"
+  },
+  "normal_path_insufficiency": {
+    "result": true,
+    "reason": "normal threshold proof cannot satisfy this governed manual review"
+  },
   "retention_period": {
     "duration": "P30D",
     "justification_ref": "regulated-service-retention-rule",
     "disposal_action": "delete"
   },
+  "evidence_handling": "retain_declared_extra_fields",
   "audit_contact": "mailto:audit@example-verifier.test",
   "review_or_appeal_ref": "https://example-verifier.test/review",
-  "normal_flow_unavailable_reason": "manual_review_required"
+  "normal_flow_unavailable_reason": "manual_review_required",
+  "request_expiry": "PT10M"
 }
 ```
 
@@ -818,8 +865,11 @@ An exceptional response MUST NOT include fields beyond the approved `requested_e
   "object_version": "1.0",
   "normal_flow_conformance": false,
   "profile_ref": "Profile R",
+  "base_request_ref": "sha256:normal-request-transcript-hash",
+  "verifier_id": "https://exceptional-verifier.test",
   "audience_binding": "present",
   "nonce_binding": "present",
+  "lawful_basis_code": "regulator_mandated_step_up",
   "lawful_basis_ref": "gb-regulated-review-basis",
   "jurisdiction_ref": "GB",
   "purpose": "manual-regulatory-review",
@@ -837,8 +887,12 @@ An exceptional response MUST NOT include fields beyond the approved `requested_e
     "legal_name": "Jane Example",
     "exact_dob": "2000-01-01"
   },
+  "withheld_fields": [],
+  "holder_decision": "accepted_all",
+  "retention_notice_acknowledged": true,
   "disclosure_scope": ["legal_name", "exact_dob"],
-  "review_or_appeal_ref": "https://example-verifier.test/review"
+  "review_or_appeal_ref": "https://example-verifier.test/review",
+  "response_expiry": "PT10M"
 }
 ```
 

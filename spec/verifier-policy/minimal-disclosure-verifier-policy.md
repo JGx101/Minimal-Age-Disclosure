@@ -18,6 +18,7 @@ This specification applies secondarily to wallets insofar as wallets MUST enforc
 ## 3. Verifier request construction rules
 A conformant verifier MUST send a normal-flow request containing the canonical request fields:
 - `object_type`
+- `object_version`
 - `profile_ref`
 - `verifier_class`
 - `requested_threshold`

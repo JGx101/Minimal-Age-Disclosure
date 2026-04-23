@@ -84,12 +84,18 @@ The normal path MUST NOT be treated as insufficient merely because it is less co
 ## 5. Exception request object
 An exceptional request object is outside the normal-flow request object defined by the age-threshold proof profile.
 
+The claim profile owns the canonical exceptional request object shape. Exception governance constrains that object; it MUST NOT define or emit a rival object type.
+
 An exceptional request MUST contain:
 - `object_type`
+- `object_version`
+- `profile_ref`
 - `exception_requested`
 - `base_request_ref`
 - `verifier_id`
 - `verifier_class`
+- `audience`
+- `policy_ref`
 - `jurisdiction_ref`
 - `use_case_code`
 - `lawful_basis_code`
@@ -105,7 +111,9 @@ An exceptional request MUST contain:
 - `request_expiry`
 - `nonce`
 
-`object_type` MUST be `age_exception_request`.
+`object_type` MUST be `age_threshold_exception_request`.
+
+`object_version` MUST use the canonical claim-profile object version.
 
 `exception_requested` MUST be `true`.
 
@@ -123,11 +131,15 @@ Example:
 
 ```json
 {
-  "object_type": "age_exception_request",
+  "object_type": "age_threshold_exception_request",
+  "object_version": "1.0",
+  "profile_ref": "Profile R",
   "exception_requested": true,
-  "base_request_ref": "normal-request-nonce-or-case-ref",
+  "base_request_ref": "sha256:normal-request-transcript-hash",
   "verifier_id": "https://regulated-verifier.example",
   "verifier_class": "V2",
+  "audience": "https://regulated-verifier.example/age-check",
+  "policy_ref": "policy:minimal-age:regulated-step-up",
   "jurisdiction_ref": "GB",
   "use_case_code": "one_off_step_up",
   "lawful_basis_code": "regulator_mandated_step_up",
@@ -156,11 +168,16 @@ If a field value is holder-specific beyond what is required to bind the transact
 ## 6. Exception response object
 A wallet that permits exceptional disclosure MUST return a bounded exceptional response object.
 
+The claim profile owns the canonical exceptional response object shape. This specification defines behavioral constraints for that object.
+
 An exceptional response MUST contain:
 - `object_type`
-- `exception_response`
+- `object_version`
+- `normal_flow_conformance`
+- `profile_ref`
 - `base_request_ref`
 - `verifier_id`
+- `audience_binding`
 - `jurisdiction_ref`
 - `lawful_basis_code`
 - `lawful_basis_ref`
@@ -172,7 +189,9 @@ An exceptional response MUST contain:
 - `nonce_binding`
 - `response_expiry`
 
-`object_type` MUST be `age_exception_response`.
+`object_type` MUST be `age_threshold_exception_response`.
+
+`normal_flow_conformance` MUST be `false`.
 
 `holder_decision` MUST be one of:
 - `accepted_all`
@@ -194,10 +213,13 @@ Example:
 
 ```json
 {
-  "object_type": "age_exception_response",
-  "exception_response": true,
-  "base_request_ref": "normal-request-nonce-or-case-ref",
+  "object_type": "age_threshold_exception_response",
+  "object_version": "1.0",
+  "normal_flow_conformance": false,
+  "profile_ref": "Profile R",
+  "base_request_ref": "sha256:normal-request-transcript-hash",
   "verifier_id": "https://regulated-verifier.example",
+  "audience_binding": "present",
   "jurisdiction_ref": "GB",
   "lawful_basis_code": "regulator_mandated_step_up",
   "lawful_basis_ref": "policy-rule-or-governance-decision-ref",

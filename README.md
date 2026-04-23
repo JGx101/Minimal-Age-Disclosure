@@ -193,6 +193,7 @@ These are not minor details. They define whether the architecture remains minima
 - [Conformance Checklist](spec/conformance/conformance-checklist.md)
 - [Privacy-Negative Test Cases](spec/conformance/privacy-negative-test-cases.md)
 - [Fixture Examples](fixtures/README.md)
+- [Exported JSON Schemas](schemas/README.md)
 
 ### Governance and Policy
 
@@ -253,7 +254,7 @@ The highest-value engagement is specific critique. If a section overstates priva
 
 The current direction is:
 
-1. automate fixture-backed request, response, metadata, retention, exception, and recovery checks
+1. expand fixture-backed request, response, metadata, retention, exception, and recovery checks
 2. map the canonical objects to concrete OpenID4VCI and OpenID4VP payload profiles
 3. evaluate concrete `Profile P` `B2` proof libraries against the unlinkability criteria
 4. refine UK and EU policy mapping without overstating likely acceptance

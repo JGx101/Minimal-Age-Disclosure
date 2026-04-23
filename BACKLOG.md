@@ -19,11 +19,13 @@
 - [x] update conformance and privacy-negative tests for the accepted architecture decisions
 - [x] close open implementation-profile and validation questions through specs, policy, prototype planning, and fixtures
 - [x] add fixture-backed examples for conformant and non-conformant request, response, retention, exception, recovery, and repeated-transaction cases
+- [x] export initial JSON Schemas for canonical request, response, and exception objects
+- [x] add a standard-library fixture validator and GitHub Actions workflow for schema and fixture checks
 
 ## Non-blocking future research and validation
 - [ ] select and evaluate concrete libraries for the `Profile P` `B2` proof-family pattern
 - [ ] map the canonical objects to specific OpenID4VCI and OpenID4VP payload profiles
-- [ ] automate JSON Schema validation for the fixture set
+- [ ] expand JSON Schema validation into full schema evaluation rather than repository-invariant checks only
 - [ ] implement repeated-transaction metadata fingerprinting checks against generated fixture batches
 - [ ] run external UK/EU policy review against the policy source categories
 - [ ] run standards feedback on the request/response object shape, binding modes, and metadata coarsening
@@ -35,9 +37,10 @@
 - [x] define acceptance criteria for `B0`, `B1`, and `B2` demonstrations
 
 ### Milestone 2: conformance automation
-- [ ] automate request-shape and response-shape checks from fixtures
+- [x] add first request-shape and response-shape checks from fixtures
 - [ ] automate metadata-fingerprinting negative cases from repeated-transaction fixtures
-- [ ] automate verifier-retention and exception-threshold checks from fixture scenarios
+- [x] add first verifier-retention fixture checks
+- [ ] automate exception-threshold checks from fixture scenarios
 
 ### Milestone 3: policy and standards review
 - [x] define UK/EU source categories for verifier class and exception-governance mapping

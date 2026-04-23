@@ -1,0 +1,56 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://minimal-age-disclosure.example/schemas/age-threshold-request.schema.json",
+  "title": "Age Threshold Request",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "object_type",
+    "object_version",
+    "profile_ref",
+    "verifier_class",
+    "requested_threshold",
+    "audience",
+    "nonce",
+    "purpose",
+    "policy_ref",
+    "jurisdiction_ref",
+    "maximum_assurance_bucket",
+    "binding_mode",
+    "freshness_requirement",
+    "exception_requested"
+  ],
+  "properties": {
+    "object_type": { "const": "age_threshold_request" },
+    "object_version": { "const": "1.0" },
+    "profile_ref": { "enum": ["Profile R", "Profile P"] },
+    "verifier_class": { "enum": ["V1", "V2", "VX"] },
+    "requested_threshold": { "enum": ["over_13", "over_16", "over_18", "over_21"] },
+    "audience": {
+      "type": "string",
+      "pattern": "^https://[^?#]+$"
+    },
+    "nonce": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9_-]{22,}$"
+    },
+    "purpose": {
+      "type": "string",
+      "pattern": "^[a-z0-9][a-z0-9_-]{2,63}$"
+    },
+    "policy_ref": {
+      "type": "string",
+      "pattern": "^(policy|trust):[a-z0-9][a-z0-9:._/-]{2,127}$"
+    },
+    "jurisdiction_ref": {
+      "type": "string",
+      "pattern": "^[A-Z]{2}(-[A-Z0-9]{1,3})?$"
+    },
+    "maximum_assurance_bucket": { "enum": ["AB1", "AB2", "AB3"] },
+    "binding_mode": { "enum": ["B0", "B1", "B2"] },
+    "freshness_requirement": {
+      "enum": ["none", "issuer_trust_state", "root_credential_state", "wallet_compromise_state"]
+    },
+    "exception_requested": { "const": false }
+  }
+}
