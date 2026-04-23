@@ -1,65 +1,137 @@
 # Metadata Minimisation
 
 ## Status
-Draft
+Draft, architecture decisions accepted
 
 ## 1. Purpose
-This specification defines the normative anti-correlation rules for supporting metadata in the minimal age-disclosure architecture.
+This specification defines normative anti-fingerprinting rules for supporting metadata in the minimal age-disclosure architecture.
+
+Metadata minimisation is a hard conformance boundary. An implementation MUST NOT treat the omission of name or DOB as sufficient privacy compliance if supporting metadata remains correlating.
 
 ## 2. Controlled metadata classes
 This specification applies to:
-- assurance references
+- assurance buckets
 - issuer references
-- timestamps
-- policy identifiers
+- timestamps and validity windows
+- policy references
 - proof-binding artifacts
-- validity windows
 - status references
+- proof format references
+- verifier retention records
 
-## 3. Core minimisation rule
-Supporting metadata MUST be minimised even where direct identity attributes are absent.
+## 3. Prohibited correlators
+Normal-flow metadata MUST NOT include:
+- stable verifier-visible holder identifiers
+- stable verifier-visible root credential references
+- reusable proof-binding artifacts
+- unique token-specific status callback URIs
+- holder-specific policy references
+- session-specific policy references
+- transaction-specific policy references beyond nonce and audience binding
+- rare provenance strings that make the holder or issuer interaction unusually identifiable
+- exact DOB, legal name, document number, or document image
+- raw proof payloads retained by default
+- verifier telemetry sufficient to reconstruct holder activity history
 
-An implementation MUST NOT treat the omission of name or DOB as sufficient proof of privacy compliance if supporting metadata remains correlating.
+## 4. Allowed metadata classes
+Normal-flow metadata MAY include only:
+- `threshold_result`
+- `assurance_bucket`
+- `issuer_class`
+- `issuer_trust_ref`
+- `validity_window`
+- `audience_binding`
+- `nonce_binding`
+- `binding_mode`
+- `possession_proof`
+- `status_evidence`
+- `proof_format_ref`
+- public `policy_ref`
+- public `jurisdiction_ref`
 
-## 4. Assurance metadata rules
-Normal-flow assurance metadata MUST use bounded assurance buckets rather than detailed provenance unless the applicable profile and governing policy require more.
+Each allowed metadata class MUST be minimised to the least specific value compatible with verifier decisioning and trust validation.
 
-The approved assurance bucket taxonomy remains subject to [ADR-0010](../../docs/adr/0010-assurance-bucket-taxonomy-and-request-semantics.md).
+## 5. Assurance coarsening
+Normal-flow assurance metadata MUST use one of:
+- `AB1`: basic age-threshold assurance
+- `AB2`: standard governed age-threshold assurance
+- `AB3`: high-assurance age-threshold assurance
 
-## 5. Issuer information rules
-Normal-flow issuer disclosure SHOULD use the least specific information compatible with trust validation.
+Assurance metadata MUST NOT disclose:
+- exact evidence source
+- document type
+- document number
+- issuing office
+- evidence inspection date
+- rare issuer-specific provenance strings
 
-Coarse issuer class SHOULD be the default disclosure.
+Verifier requests MUST use `maximum_assurance_bucket`; they MUST NOT request detailed evidence provenance in the normal flow.
 
-Exact issuer identity MAY be disclosed only where the applicable trust-resolution rule requires it.
+## 6. Issuer coarsening
+Normal-flow issuer disclosure MUST default to issuer class:
+- `A0`
+- `A1`
+- `A2`
 
-The exact boundary remains subject to [ADR-0007](../../docs/adr/0007-exact-issuer-resolution-for-trust-validation.md).
+Exact issuer identity MAY be used for trust validation only when issuer class and `issuer_trust_ref` are insufficient.
 
-## 6. Time and validity rules
-Fine-grained timestamps MUST be avoided where bounded validity information is sufficient.
+If exact issuer identity is used for trust validation, the verifier MUST NOT retain it as a default retained identifier unless retention is explicitly justified by verifier compliance rules.
 
-Validity granularity and freshness semantics remain subject to [ADR-0011](../../docs/adr/0011-validity-granularity-and-freshness-policy-boundaries.md).
+Issuer references MUST NOT be holder-specific or token-specific.
 
-## 7. Proof-binding metadata rules
-Proof-binding artifacts MUST NOT be reusable across verifier interactions by default.
+## 7. Timestamp and validity coarsening
+Verifier retention MUST use coarse time buckets by default:
+- `V1` retention SHOULD use date-level buckets.
+- `V2` and `VX` retention MAY use hour-level buckets where needed for audit or fraud review.
 
-Implementations MUST treat reusable verifier-visible proof-binding artifacts as privacy-significant and, unless explicitly governed by a profile-specific tradeoff, non-conformant.
+Raw cryptographic timestamps and exact proof-generation times MUST NOT be retained by default.
 
-## 8. Status and reference rules
-Status references SHOULD be batched or cacheable where possible.
+`validity_window` MAY be verifier-visible where needed to evaluate proof freshness, but it MUST be retained only at the permitted verifier-retention granularity.
 
-Token-specific unique callback references MUST NOT be the common normal-flow design.
+## 8. Policy reference coarsening
+`policy_ref` MUST identify a public policy, rule, service category, or governance requirement.
 
-Status and freshness trigger details remain subject to [ADR-0011](../../docs/adr/0011-validity-granularity-and-freshness-policy-boundaries.md).
+`policy_ref` MUST NOT contain:
+- holder-specific identifiers
+- account identifiers
+- session identifiers
+- transaction identifiers
+- campaign or experiment identifiers that create avoidable fingerprinting
 
-## 9. Policy identifier rules
-Policy identifiers MUST be bounded and SHOULD avoid unnecessary fingerprinting value.
+`purpose` MUST be human-reviewable and MUST NOT smuggle correlation handles.
 
-Implementations MUST NOT use policy identifiers to smuggle holder-specific or transaction-specific correlation handles into the normal flow.
+## 9. Status reference minimisation
+`status_evidence` MUST be one of:
+- `none`
+- batched status
+- cacheable status
+- relayable status
+- issuer-trust-state reference
+- root-credential-state reference
+- wallet-compromise-state reference
 
-## 10. Conformance consequences
-Metadata minimisation failures MUST be treated as conformance failures even where direct identity fields are absent.
+Status references MUST NOT require token-specific live issuer callbacks in normal flow.
 
-Profile-specific tightening:
-- `Profile R` MUST satisfy the common baseline.
-- `Profile P` SHOULD impose stricter anti-correlation controls than `Profile R`.
+Status references MUST NOT let an issuer or status service observe ordinary verifier presentations.
+
+## 10. Binding metadata minimisation
+`B0` possession evidence MUST be transaction-bound and MUST NOT expose additional verifier-visible holder handles.
+
+`B1` possession evidence MUST be verifier-scoped and fresh per transaction. Any verifier-scoped continuity material MUST be treated as privacy-sensitive and MUST NOT be retained as default telemetry.
+
+`B2` possession evidence MUST be unlinkable and MUST NOT expose verifier-stable holder handles.
+
+## 11. Metadata-driven conformance failures
+An implementation MUST be treated as non-conformant if:
+- allowed metadata is more granular than required for the verifier decision
+- metadata permits cross-verifier correlation in normal flow
+- proof-binding artifacts are reusable beyond the selected binding mode
+- status references create presentation logs
+- policy references contain hidden holder, session, or transaction identifiers
+- verifier retention reconstructs holder activity history
+- exact issuer identity is retained by default without governance justification
+
+## 12. Profile-specific tightening
+`Profile R` MUST satisfy the common metadata baseline and MUST treat `B1` continuity material as privacy-sensitive.
+
+`Profile P` MUST satisfy the common metadata baseline and MUST treat verifier-stable binding metadata as non-conformant in normal flow.

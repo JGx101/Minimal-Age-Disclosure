@@ -10,6 +10,7 @@
 - [Normal flow](#normal-flow)
 - [Disclosure target](#normal-flow-disclosure-target)
 - [Normal-flow exclusions](#normal-flow-exclusions)
+- [Binding modes](#binding-modes)
 - [Overview diagram](#overview-diagram)
 - [Related architecture pages](#related-architecture-pages)
 
@@ -85,8 +86,9 @@ Defines:
 3. Wallet stores the root credential locally.
 4. Verifier sends a minimal request with threshold, audience, nonce, and policy context.
 5. Wallet derives a transaction-bound proof from the root credential.
-6. Verifier validates the proof, trust, and policy conditions locally.
-7. Verifier retains only minimal decision evidence under policy.
+6. Wallet applies the selected binding mode: `B0`, `B1`, or `B2`.
+7. Verifier validates the proof, trust, binding mode, and policy conditions locally.
+8. Verifier retains only minimal decision evidence under policy.
 
 For the step-by-step sequence view, continue to [Flows and Topology](./FLOWS_AND_TOPOLOGY.md#normal-presentation-sequence).
 
@@ -110,6 +112,17 @@ The verifier should not receive:
 - a stable root credential reference
 - token-specific live issuer callbacks by default
 
+## Binding Modes
+Binding is explicit because anti-sharing and anti-correlation pull against each other.
+
+| Mode | Default use | Verifier class | Correlation boundary |
+| --- | --- | --- | --- |
+| `B0` | Standard low-friction threshold checks | `V1` | No additional verifier-visible holder handle |
+| `B1` | High-assurance `Profile R` checks | `V2` | Verifier-scoped only; no cross-verifier reuse |
+| `B2` | Privacy-maximal checks | `Profile P` | No verifier-stable holder handle |
+
+No normal-flow binding mode may expose a reusable verifier-visible proof-binding artifact.
+
 ## Overview Diagram
 This diagram shows the default interaction pattern across issuer, wallet, verifier, trust, status, and governance actors. Read it as the single-page summary of the architecture thesis before moving into the detailed sequences.
 
@@ -118,7 +131,7 @@ flowchart LR
     I[Issuer] -->|issues root credential| W[Wallet]
     W -->|stores root credential locally| W
     V[Verifier] -->|minimal request: threshold, audience, nonce, policy| W
-    W -->|derived transaction-bound proof| V
+    W -->|derived proof using B0, B1, or B2| V
     V -->|issuer validation| T[Trust registry]
     V -. optional privacy-preserving status .-> S[Status service or relay]
     A[Auditor or certifier] -. governance and conformance .-> I

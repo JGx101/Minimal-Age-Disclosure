@@ -8,7 +8,7 @@ Privacy-preserving age-threshold proof architecture for proving `18+` or similar
 [![Status: Draft](https://img.shields.io/badge/status-draft-b45309.svg)](BACKLOG.md)
 [![Discussions](https://img.shields.io/badge/discussions-design%20feedback-2563eb.svg)](https://github.com/JGx101/Minimal-Age-Disclosure/discussions)
 
-**Quick links:** [Start Here](#start-here) | [Project Status](#project-status) | [Open Decisions](#open-decisions) | [Document Map](#document-map) | [Contributing](CONTRIBUTING.md)
+**Quick links:** [Start Here](#start-here) | [Project Status](#project-status) | [Accepted Architecture Decisions](#accepted-architecture-decisions) | [Document Map](#document-map) | [Contributing](CONTRIBUTING.md)
 
 ## At a Glance
 
@@ -18,7 +18,7 @@ This repository argues for a narrow thesis:
 
 The project explores a model where a wallet holds a root credential and presents a transaction-bound derived proof to a verifier. The verifier should learn only what is necessary to answer the policy question, such as `18+`, and no more.
 
-This is not a production implementation. It is a public documentation set intended to make the architecture, governance model, tradeoffs, and unresolved decisions legible.
+This is not a production implementation. It is a public documentation set intended to make the architecture, governance model, tradeoffs, and accepted design decisions legible.
 
 ## Start Here
 
@@ -27,7 +27,7 @@ Choose the path that matches what you need:
 - New to the project: read [Project Brief](PROJECT_BRIEF.md), then this README's status and architecture sections.
 - Evaluating the core technical model: read [Architecture Overview](docs/architecture/ARCHITECTURE_OVERVIEW.md) and [Root vs Derived Proof Model](spec/root-derived-proof/root-vs-derived-proof-model.md).
 - Assessing verifier obligations: read [Minimal-Disclosure Verifier Policy](spec/verifier-policy/minimal-disclosure-verifier-policy.md), [Verifier Compliance and Retention](spec/verifier-policy/verifier-compliance-and-retention.md), and [Exception Governance](spec/verifier-policy/exception-governance.md).
-- Looking for maturity and unresolved questions: jump to [Project Status](#project-status) and [Open Decisions](#open-decisions).
+- Looking for maturity and accepted decisions: jump to [Project Status](#project-status) and [Accepted Architecture Decisions](#accepted-architecture-decisions).
 - Want the full map: see [Document Map](#document-map).
 
 ## Why It Matters
@@ -115,10 +115,11 @@ Completed baseline:
 - conformance checklist and privacy-negative test catalog drafted
 - prototype work intentionally kept at planning level
 
-Still open by design:
+Recently settled:
 
 - exact issuer resolution boundary
-- minimum Profile R holder-binding mechanism
+- `B0` / `B1` / `B2` binding modes
+- canonical request and response objects
 - assurance bucket taxonomy
 - freshness and validity granularity
 - verifier audit minimum
@@ -146,18 +147,20 @@ Privacy-maximal research profile:
 - room for more ambitious proof constructions
 - explicit research maturity boundaries
 
-## Open Decisions
+## Accepted Architecture Decisions
 
-The most important unresolved architectural questions are tracked as ADRs:
+The most important architecture gaps have been resolved in ADRs and reflected in the specs:
 
 - [ADR-0007: Exact issuer resolution for trust validation](docs/adr/0007-exact-issuer-resolution-for-trust-validation.md)
 - [ADR-0008: Minimum holder-binding mechanism for Profile R](docs/adr/0008-minimum-holder-binding-mechanism-for-profile-r.md)
+- [ADR-0009: Canonical ownership of the verifier request object](docs/adr/0009-canonical-ownership-of-the-verifier-request-object.md)
 - [ADR-0010: Assurance bucket taxonomy and request semantics](docs/adr/0010-assurance-bucket-taxonomy-and-request-semantics.md)
 - [ADR-0011: Validity granularity and freshness policy boundaries](docs/adr/0011-validity-granularity-and-freshness-policy-boundaries.md)
+- [ADR-0013: Conditions for non-normal root credential disclosure](docs/adr/0013-conditions-for-non-normal-root-credential-disclosure.md)
 - [ADR-0014: Verifier audit record minimum](docs/adr/0014-verifier-audit-record-minimum.md)
 - [ADR-0015: Exception-path abuse thresholds and enforcement](docs/adr/0015-exception-path-abuse-thresholds-and-enforcement.md)
 
-These are not minor details. They are the decisions that determine whether the architecture remains minimally disclosive under operational pressure.
+These are not minor details. They define whether the architecture remains minimally disclosive under operational pressure.
 
 ## Document Map
 
@@ -206,7 +209,7 @@ If you want a short pass:
 1. Read [Project Brief](PROJECT_BRIEF.md).
 2. Read [Architecture Overview](docs/architecture/ARCHITECTURE_OVERVIEW.md).
 3. Read [Root vs Derived Proof Model](spec/root-derived-proof/root-vs-derived-proof-model.md).
-4. Check [Project Status](#project-status) and [Open Decisions](#open-decisions).
+4. Check [Project Status](#project-status) and [Accepted Architecture Decisions](#accepted-architecture-decisions).
 
 If you want to review the architecture critically:
 
@@ -222,7 +225,7 @@ This project is documentation-led. Useful contributions are typically one of:
 - tighten a normative requirement or conformance clause
 - identify verifier-side over-collection or retention gaps
 - improve policy, trust, or exception governance language
-- help resolve an open ADR with a clear tradeoff analysis
+- test an accepted ADR with a clear counterexample or implementation implication
 
 Before proposing major changes, review the architecture docs and relevant ADRs so discussions stay anchored to the current decision record.
 
@@ -244,8 +247,8 @@ The highest-value engagement is specific critique. If a section overstates priva
 
 The current direction is:
 
-1. resolve the ADR-backed architectural contradictions
+1. review the accepted architecture decisions against prototype feasibility
 2. promote draft normative clauses into a more stable baseline
 3. tighten profile-specific conformance deltas for Profile R and Profile P
 4. refine UK and EU policy mapping without overstating likely acceptance
-5. begin narrow implementation work only after unresolved interface assumptions are decided
+5. begin narrow implementation work only after the accepted interfaces are validated against prototype feasibility

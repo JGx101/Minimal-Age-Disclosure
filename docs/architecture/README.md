@@ -20,13 +20,13 @@ This directory contains the canonical architecture set for the repository. If yo
 - `FLOWS_AND_TOPOLOGY.md`: issuance, proof, verification, and trust boundaries
 - `GOVERNANCE_AND_CONTROLS.md`: policy, oversight, and verifier-restraint mechanisms
 - `DUAL_PROFILE_OVERVIEW.md`: split between interoperable and privacy-maximal tracks
-- `POTENTIAL_FINAL_STATE.md`: target end-state direction once current blockers are resolved
+- `POTENTIAL_FINAL_STATE.md`: target end-state direction after the accepted architecture decisions are implemented consistently
 
 ## How this fits the rest of the repo
 - Read `../../PROJECT_BRIEF.md` first for project scope and status.
 - Use `../../BACKLOG.md` for milestone status and implementation gates.
-- Use `../../OPEN_QUESTIONS.md` to see which unresolved decisions still affect the architecture.
-- Use `../adr/README.md` and the ADR set when an architecture point is still contested or recently changed.
+- Use `../../OPEN_QUESTIONS.md` to see which implementation-profile questions remain.
+- Use `../adr/README.md` and the ADR set when an architecture point was recently accepted or needs historical context.
 
 ## Architecture rules that should stay invariant
 - The normal flow separates the root credential plane from the derived proof plane.

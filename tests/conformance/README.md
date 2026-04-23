@@ -6,8 +6,12 @@ Conformance tests check whether issuer, wallet, verifier, and ecosystem behavior
 ## Core focus areas
 - root credential stays local in the normal flow
 - derived proof is transaction-bound
+- `B0`, `B1`, and `B2` binding modes are used only in allowed contexts
 - verifier request object is conformant
-- trust, nonce, and audience binding are enforced
+- verifier response object is conformant
+- trust, nonce, audience, binding mode, and validity are enforced
+- issuer trust, root credential, and wallet compromise state domains are respected
+- metadata coarsening rules are enforced
 - retention rules are respected
 - exception handling remains outside normal conformance
 

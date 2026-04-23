@@ -1,32 +1,26 @@
 # ADR-0015: Exception-Path Abuse Thresholds And Enforcement
 
 ## Status
-Proposed
+Accepted
 
 ## Date
 2026-04-23
 
 ## Context
-The repository requires the exceptional path to remain outside normal conformance, but it has not yet defined what counts as repeated abuse or what enforcement follows.
+The exceptional path must remain outside normal conformance and must not become the commercial default.
 
-## Contradiction being resolved
-Without explicit thresholds and enforcement, the exceptional path can become the commercial default while the repo still claims minimal disclosure.
+## Decision
+`V1` verifiers MUST NOT invoke exceptional disclosure.
 
-## Why the specs cannot safely decide this yet
-This decision affects:
-- verifier governance
-- conformance scoring
-- policy legitimacy
-- public credibility of the minimal-disclosure claim
+Any exceptional request missing required lawful-basis fields MUST be treated as non-conformant.
 
-## Options under consideration
-- fixed review threshold for repeated exceptional use
-- verifier-class-specific thresholds
-- qualitative governance review without numeric threshold
+Exceptional use above `5%` of a verifier's age-check volume in a calendar month MUST trigger governance review.
 
-## Dependent files and consequences
-- exception governance
-- verifier policy
-- conformance checklist
-- privacy-negative tests
-- policy pack outline
+Exceptional use above `10%` of a verifier's age-check volume in a calendar month MUST be treated as a conformance failure unless governance explicitly approves a scoped exception class.
+
+Repeated review triggers across two consecutive months MUST be treated as a conformance failure unless governance explicitly approves a scoped exception class.
+
+## Consequences
+- Exception normalization is directly testable.
+- Verifier classes have concrete eligibility rules.
+- Governance review and conformance failure are separated by explicit thresholds.

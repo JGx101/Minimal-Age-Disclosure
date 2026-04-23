@@ -25,7 +25,7 @@ V1 will focus on:
 - narrow assurance metadata
 - OpenID4VCI issuance and OpenID4VP presentation
 - explicit verifier policy and conformance requirements
-- short-lived credentials as the default status strategy
+- bounded derived proofs and state-based status as the default validity strategy
 - a documentation-first reference prototype
 
 V1 will not treat the following as core requirements:
@@ -60,7 +60,7 @@ It also improves:
 
 ### Negative
 - some sectors will require features that fall outside v1
-- credential sharing and stronger assurance questions remain partly open
+- some concrete proof-construction and assurance implementation details remain future work
 - future ADRs will be needed for some extensions
 
 ## Follow-up actions

@@ -1,7 +1,7 @@
 # ADR-0006: Use transaction-bound proof of rightful possession without a verifier-visible stable holder identifier
 
 ## Status
-Proposed
+Accepted
 
 ## Date
 2026-04-23
@@ -46,7 +46,7 @@ This approach best balances:
 - some stronger anti-sharing goals remain out of scope for v1
 
 ## Follow-up actions
-- define root and derived proof roles in the core specs
-- update verifier policy to require audience and nonce binding
-- add metadata minimisation and retention rules
-- add conformance tests ensuring no reusable holder binding data leaks in the normal flow
+- keep root and derived proof roles aligned with the core specs
+- keep verifier policy aligned with audience, nonce, and binding-mode rules
+- keep metadata minimisation and retention rules aligned with `B0`, `B1`, and `B2`
+- keep conformance tests checking that no reusable holder binding data leaks in the normal flow

@@ -1,7 +1,7 @@
 # ADR-0014: Verifier Audit Record Minimum
 
 ## Status
-Proposed
+Accepted
 
 ## Date
 2026-04-23
@@ -9,24 +9,21 @@ Proposed
 ## Context
 The governance model requires meaningful audit and sanctions, but the privacy model requires minimal verifier retention.
 
-## Contradiction being resolved
-The repository has not yet fixed the smallest retained evidence set that still supports audit and enforcement.
+## Decision
+Default verifier retention MAY include only:
+- decision outcome
+- approved coarse time bucket
+- policy reference
+- bounded audit reason
+- verifier class
+- binding mode
+- exception flag
 
-## Why the specs cannot safely decide this yet
-This decision affects:
-- verifier retention limits
-- telemetry boundaries
-- exception audit records
-- conformance pass/fail behavior
+Exceptional audit records MUST include the fields defined by exception governance and MUST NOT retain raw proof payloads or unnecessary identity evidence by default.
 
-## Options under consideration
-- decision outcome plus bounded audit reason only
-- decision outcome plus coarse time bucket plus policy reference
-- class-dependent audit minimums
+Raw proof payloads, raw proof transcripts, reusable binding artifacts, unique status references, and fine-grained timestamps MUST NOT be retained by default.
 
-## Dependent files and consequences
-- verifier compliance and retention
-- exception governance
-- conformance checklist
-- privacy-negative tests
-- prototype implementation plan
+## Consequences
+- Verifiers have enough retained evidence for basic governance review.
+- Retention remains narrow enough to reduce tracking risk.
+- Conformance can test default retention directly.

@@ -1,7 +1,7 @@
 # ADR-0011: Validity Granularity And Freshness Policy Boundaries
 
 ## Status
-Proposed
+Accepted
 
 ## Date
 2026-04-23
@@ -9,25 +9,23 @@ Proposed
 ## Context
 The architecture prefers bounded validity and no routine live issuer callbacks, but still allows freshness-sensitive behavior where justified.
 
-## Contradiction being resolved
-The repository has not yet decided the allowed validity granularity, freshness triggers, and verifier-class permissions for status-related checks.
+## Decision
+The canonical freshness requirement values are:
+- `none`
+- `issuer_trust_state`
+- `root_credential_state`
+- `wallet_compromise_state`
 
-## Why the specs cannot safely decide this yet
-This decision affects:
-- metadata minimisation
-- replay protection assumptions
-- status privacy
-- Profile R deployability
+Token-specific live issuer callbacks MUST NOT be used in normal flow.
 
-## Options under consideration
-- expiry-only common baseline with narrow freshness exceptions
-- verifier-class-based freshness permissions
-- profile-specific freshness and status rules
+Verifier retention MUST use coarse time buckets by default:
+- date-level for `V1`
+- date-level for `V2`, unless hour-level granularity is needed for audit or fraud review
+- hour-level for `VX` exceptional records where needed for audit
 
-## Dependent files and consequences
-- claim profile
-- verifier policy
-- trust model
-- metadata minimisation
-- conformance checklist
-- revocation/status analysis
+Raw cryptographic timestamps MUST NOT be retained by default.
+
+## Consequences
+- Freshness is explicit without reopening issuer-observability risk.
+- Status checks attach to trust/root/wallet state, not ordinary presentations.
+- Metadata tests can evaluate timestamp and freshness granularity.

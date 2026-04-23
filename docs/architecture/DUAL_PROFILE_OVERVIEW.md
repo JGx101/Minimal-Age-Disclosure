@@ -32,6 +32,7 @@ Both profiles share:
 - one verifier-restraint model
 - one trust-registry boundary model
 - one conformance language
+- one binding mode taxonomy: `B0`, `B1`, and `B2`
 
 ## Profile R
 Regulator-ready and interoperable profile.
@@ -46,6 +47,8 @@ Regulator-ready and interoperable profile.
 ### Likely Characteristics
 - mainstream issuance and presentation rails
 - transaction-bound or short-lived verifier-facing artifacts
+- `B0` for `V1` checks
+- `B1` for `V2` high-assurance checks
 - conservative proof and status design
 - explicit maturity and deployment assumptions
 
@@ -60,9 +63,10 @@ Privacy-maximal and research-oriented profile.
 
 ### Likely Characteristics
 - more ambitious derived-proof approaches
+- `B2` unlinkable proof of possession
 - stronger anti-correlation expectations
 - more open research on proof-binding and revocation
-- explicit maturity notes and unresolved implementation tradeoffs
+- explicit maturity notes and implementation tradeoffs
 
 ## Why Split Profiles
 One profile should not pretend to satisfy every deployment and research ambition at once.

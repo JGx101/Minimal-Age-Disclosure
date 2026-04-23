@@ -16,8 +16,7 @@ That was a strong baseline, but it still flattened several hard tensions into on
 ## Main architecture gaps found
 
 ### 1. Holder binding versus anti-correlation
-The earlier model expected verifier-visible binding evidence in the response while also rejecting stable holder identifiers. That left a key question unresolved:
-how do you prove rightful possession without quietly leaking a reusable verifier-visible key or artifact?
+The earlier model expected verifier-visible binding evidence in the response while also rejecting stable holder identifiers. The current architecture resolves this by defining `B0`, `B1`, and `B2` binding modes, each with explicit anti-correlation boundaries.
 
 ### 2. Short-lived credentials versus issuer observability
 Short-lived credentials help reduce status lookups, but frequent re-issuance can make the issuer a de facto activity checkpoint. The earlier model did not clearly separate root credential lifecycle from verifier-facing proof lifecycle.

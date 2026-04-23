@@ -39,6 +39,10 @@ flowchart LR
     V2[Verifier V2] --> W2
     VX[Verifier VX] --> W1
 
+    W1 --> B0[B0 standard binding]
+    W2 --> B1[B1 verifier-scoped binding]
+    W2 --> B2[B2 unlinkable binding]
+
     V1 --> T[Trust registry]
     V2 --> T
     VX --> T
@@ -61,6 +65,8 @@ flowchart LR
 - multiple issuers under one governance model
 - multiple conformant wallets and verifiers
 - trusted-list or registry-based issuer validation
+- explicit `B0`, `B1`, and `B2` binding modes
+- separated issuer trust, root credential, and wallet compromise state domains
 - privacy-preserving status only where justified
 - published profile and conformance suite
 - audit and sanctions for verifier abuse

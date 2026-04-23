@@ -1,32 +1,22 @@
 # ADR-0013: Conditions For Non-Normal Root Credential Disclosure
 
 ## Status
-Proposed
+Accepted
 
 ## Date
 2026-04-23
 
 ## Context
-The repository treats direct root credential disclosure as non-normal, but it has not yet defined whether any such disclosure is ever permitted and under what governance rules.
+The repository treats direct root credential disclosure as non-normal.
 
-## Contradiction being resolved
-The architecture needs a clear boundary between “never allowed” and “allowed only under separately governed exceptional conditions.”
+## Decision
+Direct root credential disclosure is prohibited in normal flow.
 
-## Why the specs cannot safely decide this yet
-This decision affects:
-- exceptional governance
-- verifier policy
-- root-vs-derived proof model
-- prototype interface assumptions
+Any direct root credential disclosure MUST be treated as exceptional, outside normal-flow conformance, and governed by `spec/verifier-policy/exception-governance.md`.
 
-## Options under consideration
-- root credential disclosure prohibited in all profiles
-- root credential disclosure permitted only in exceptional flow
-- profile-specific non-normal disclosure rules with explicit sanctions
+If a verifier requires root credential disclosure for an ordinary threshold check, the flow MUST be treated as non-conformant.
 
-## Dependent files and consequences
-- root-vs-derived proof model
-- verifier policy
-- exception governance
-- conformance checklist
-- prototype implementation plan
+## Consequences
+- The root/derived proof boundary remains hard in normal flow.
+- Exceptional root disclosure cannot be used to claim normal-flow conformance.
+- Conformance tests can fail ordinary flows that request the root credential.

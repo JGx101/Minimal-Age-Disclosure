@@ -12,19 +12,20 @@ The repository now has:
 - project scope is narrow and coherent
 - normal-flow disclosure target is clear
 - governance is treated as part of the system
+- binding modes, metadata coarsening, recovery state, and exception thresholds are now specified
 - the repo is publishable as a serious work-in-progress
 
-## What remains open
-- exact issuer resolution in the normal flow
-- minimum holder-binding mechanism for `Profile R`
-- assurance bucket taxonomy
-- freshness and validity granularity
-- verifier audit minimum
-- exception-abuse thresholds
+## Recently resolved
+- exact issuer resolution defaults to issuer class plus minimised trust reference
+- `B0`, `B1`, and `B2` define the binding taxonomy
+- `AB1`, `AB2`, and `AB3` define the assurance bucket taxonomy
+- freshness attaches to issuer trust, root credential, or wallet compromise state
+- verifier audit minimum and exception-abuse thresholds are specified
+- normal-flow metadata anti-fingerprinting is now a conformance boundary
 
 ## Roadmap
-1. finish normative spec text
-2. land ADR stubs for unresolved contradictions
-3. tighten conformance and privacy-negative tests
+1. review accepted interfaces against prototype feasibility
+2. convert privacy-negative tests into fixture-backed checks
+3. tighten profile-specific conformance deltas
 4. refine policy and standards mapping
-5. keep prototype planning narrow until interfaces are stable
+5. keep production implementation out of scope until prototype assumptions are validated

@@ -19,5 +19,7 @@ The repository therefore treats status as:
 
 It does not treat status as a neutral implementation detail.
 
-## Open dependency
-The exact freshness and validity boundaries remain subject to [ADR-0011](../adr/0011-validity-granularity-and-freshness-policy-boundaries.md).
+## Accepted boundary
+Freshness requirements are now limited to `none`, `issuer_trust_state`, `root_credential_state`, and `wallet_compromise_state` as accepted in [ADR-0011](../adr/0011-validity-granularity-and-freshness-policy-boundaries.md).
+
+Token-specific live issuer callbacks remain prohibited in normal flow.

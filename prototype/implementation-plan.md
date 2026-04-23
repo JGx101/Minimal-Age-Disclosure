@@ -22,13 +22,13 @@ Its purpose is to demonstrate:
 - optional batched status mock where justified
 
 ## Interface assumptions that MUST be settled before prototype implementation
-- canonical verifier request fields
-- canonical normal-flow proof payload
-- exact issuer-resolution rules
-- approved Profile R holder-binding mechanism
-- status subject and freshness boundaries
-- minimum verifier audit record
-- recovery and compromise interface assumptions
+- canonical verifier request fields are defined in the claim profile
+- canonical normal-flow proof payload is defined in the claim profile
+- exact issuer-resolution rules are accepted in ADR-0007
+- `Profile R` holder binding uses `B0` for `V1` and `B1` for `V2`
+- status subject and freshness boundaries are accepted in ADR-0011
+- minimum verifier audit record is accepted in ADR-0014
+- recovery and compromise state domains are defined in the recovery spec
 
 ## Demo scenarios
 - threshold proof demonstration

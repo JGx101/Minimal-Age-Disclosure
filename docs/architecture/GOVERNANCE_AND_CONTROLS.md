@@ -7,6 +7,9 @@
 - [Quick links](#quick-links)
 - [Issuer classes](#issuer-classes)
 - [Verifier classes](#verifier-classes)
+- [Binding modes](#binding-modes)
+- [State domains](#state-domains)
+- [Exception controls](#exception-controls)
 - [Governance principles](#governance-principles)
 - [Key controls](#key-controls)
 - [Related architecture pages](#related-architecture-pages)
@@ -34,6 +37,31 @@
 - `V2` high-assurance verifier
 - `VX` exceptional verifier
 
+## Binding Modes
+| Mode | Allowed use | Control purpose |
+| --- | --- | --- |
+| `B0` | `V1` standard checks | baseline transaction binding without an extra holder handle |
+| `B1` | `V2` / high-assurance `Profile R` | verifier-scoped anti-sharing without cross-verifier reuse |
+| `B2` | `Profile P` | unlinkable proof of possession |
+
+No binding mode may expose a reusable verifier-visible proof-binding artifact in the normal flow.
+
+## State Domains
+| Domain | Values |
+| --- | --- |
+| Issuer trust state | `trusted`, `under_review`, `suspended`, `withdrawn`, `compromised`, `retired` |
+| Root credential state | `active`, `expiring`, `suspended`, `revoked`, `reissued`, `expired` |
+| Wallet compromise state | `normal`, `lost_unconfirmed`, `lost_confirmed`, `compromised`, `recovered`, `retired` |
+
+State changes must support recovery and compromise response without presentation logs.
+
+## Exception Controls
+- `V1` must not invoke exceptional disclosure.
+- `V2` may request bounded step-up only where normal flow cannot satisfy the governing rule.
+- `VX` may request exceptional higher disclosure only with explicit lawful-basis fields.
+- Exception use above `5%` of monthly age-check volume triggers review.
+- Exception use above `10%` or repeated review triggers across two consecutive months is a conformance failure unless governance approves a scoped exception class.
+
 ## Governance Principles
 - issuers must be trustable under a recognised governance model
 - verifiers must be constrained by policy and audit, not only by wallet UX
@@ -45,6 +73,8 @@
 - no stable verifier-visible holder identifier in the normal flow
 - no root credential presentation in the normal flow
 - no live token-specific issuer callback by default
+- `B1` verifier-scoped continuity material cannot be retained as default telemetry
+- `B2` cannot expose verifier-stable holder handles
 - metadata minimisation as a formal control domain
 - verifier compliance and retention rules
 - privacy-negative testing

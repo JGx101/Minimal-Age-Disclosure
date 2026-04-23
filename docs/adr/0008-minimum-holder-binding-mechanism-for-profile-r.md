@@ -1,7 +1,7 @@
 # ADR-0008: Minimum Holder-Binding Mechanism For Profile R
 
 ## Status
-Proposed
+Accepted
 
 ## Date
 2026-04-23
@@ -9,25 +9,17 @@ Proposed
 ## Context
 The architecture requires transaction-bound rightful possession while rejecting stable verifier-visible holder identifiers in the normal flow.
 
-## Contradiction being resolved
-The repository has not yet chosen the minimum acceptable Profile R holder-binding mechanism.
+## Decision
+The project defines three binding modes:
+- `B0`: transaction-bound baseline binding for `V1`
+- `B1`: verifier-scoped pairwise proof of possession for `V2` and high-assurance `Profile R`
+- `B2`: unlinkable proof of possession for `Profile P`
 
-## Why the specs cannot safely decide this yet
-This decision affects:
-- replay resistance
-- anti-correlation
-- conformance pass/fail rules
-- prototype interface planning
+`Profile R` MUST support `B0` for `V1` checks and `B1` for `V2` high-assurance checks.
 
-## Options under consideration
-- pairwise verifier-bound holder key
-- one-time or transaction-specific holder proof artifact
-- another bounded pragmatic mechanism documented as a Profile R tradeoff
+`B1` MAY use verifier-scoped continuity material, but it MUST NOT expose cross-verifier reusable artifacts and MUST NOT be retained as default telemetry.
 
-## Dependent files and consequences
-- claim profile
-- root-vs-derived proof model
-- metadata minimisation
-- conformance checklist
-- privacy-negative tests
-- prototype implementation plan
+## Consequences
+- Holder binding is no longer underspecified.
+- `Profile R` has a deployable high-assurance binding stance without accepting global correlation.
+- `Profile P` remains distinct by requiring `B2` unlinkable proof of possession.

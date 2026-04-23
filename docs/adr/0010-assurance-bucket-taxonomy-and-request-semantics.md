@@ -1,32 +1,25 @@
 # ADR-0010: Assurance Bucket Taxonomy And Request Semantics
 
 ## Status
-Proposed
+Accepted
 
 ## Date
 2026-04-23
 
 ## Context
-The architecture requires bounded assurance metadata, but the taxonomy and verifier consumption rules are not yet fixed.
+The architecture requires bounded assurance metadata that remains useful to verifiers without becoming a fingerprinting surface.
 
-## Contradiction being resolved
-The repository has not decided how coarse assurance may be while remaining useful for verifier policy and standards legibility.
+## Decision
+Normal-flow assurance metadata MUST use:
+- `AB1`: basic age-threshold assurance
+- `AB2`: standard governed age-threshold assurance
+- `AB3`: high-assurance age-threshold assurance
 
-## Why the specs cannot safely decide this yet
-This decision affects:
-- metadata minimisation
-- verifier requests
-- UK/EU mapping
-- conformance repeatability
+Verifier requests MUST use `maximum_assurance_bucket`.
 
-## Options under consideration
-- small common assurance bucket set
-- profile-specific assurance buckets
-- coarse baseline plus profile-specific extension semantics
+Normal-flow assurance metadata MUST NOT disclose evidence details, exact evidence source, document type, document number, issuing office, inspection date, or rare provenance strings.
 
-## Dependent files and consequences
-- claim profile
-- trust model
-- metadata minimisation
-- conformance checklist
-- privacy-negative tests
+## Consequences
+- Assurance is coarse enough for anti-fingerprinting.
+- Verifier requests remain policy-readable without over-requesting provenance.
+- Conformance can test bucket usage directly.
