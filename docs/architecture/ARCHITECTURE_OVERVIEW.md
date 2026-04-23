@@ -1,9 +1,38 @@
 # Architecture Overview
 
-## Core thesis
+> This page is the entry point for the architecture set. Start here for the core thesis and system shape, then follow the links into flows, governance, profile strategy, and the target end state.
+
+## In This Document
+- [How to read this set](#how-to-read-this-set)
+- [Architecture map](#architecture-map)
+- [Core thesis](#core-thesis)
+- [Layered model](#layered-model)
+- [Normal flow](#normal-flow)
+- [Disclosure target](#normal-flow-disclosure-target)
+- [Normal-flow exclusions](#normal-flow-exclusions)
+- [Overview diagram](#overview-diagram)
+- [Related architecture pages](#related-architecture-pages)
+
+## How to Read This Set
+- Read this page first for the architecture thesis and the six-plane model.
+- Use [Flows and Topology](./FLOWS_AND_TOPOLOGY.md) for the end-to-end interaction sequences and privacy boundaries.
+- Use [Governance and Controls](./GOVERNANCE_AND_CONTROLS.md) for issuer or verifier classes and the formal restraint model.
+- Use [Dual Profile Overview](./DUAL_PROFILE_OVERVIEW.md) for the `Profile R` versus `Profile P` split.
+- Use [Potential Final State](./POTENTIAL_FINAL_STATE.md) for the mature-ecosystem target picture.
+
+## Architecture Map
+| If you want to understand... | Read... |
+| --- | --- |
+| the overall thesis and planes | [Architecture Overview](./ARCHITECTURE_OVERVIEW.md) |
+| who talks to whom and in what order | [Flows and Topology](./FLOWS_AND_TOPOLOGY.md) |
+| governance boundaries and controls | [Governance and Controls](./GOVERNANCE_AND_CONTROLS.md) |
+| why there are two architectural profiles | [Dual Profile Overview](./DUAL_PROFILE_OVERVIEW.md) |
+| the intended mature ecosystem shape | [Potential Final State](./POTENTIAL_FINAL_STATE.md) |
+
+## Core Thesis
 A relying party should be able to decide whether a holder meets an age threshold without learning the holder's identity or receiving a reusable tracking handle.
 
-## Layered model
+## Layered Model
 
 ### 1. Governance plane
 Defines:
@@ -50,7 +79,7 @@ Defines:
 - red-path wallet UX
 - audit and sanctions
 
-## Normal flow
+## Normal Flow
 1. Issuer checks evidence once.
 2. Issuer issues a root credential to the wallet.
 3. Wallet stores the root credential locally.
@@ -59,7 +88,9 @@ Defines:
 6. Verifier validates the proof, trust, and policy conditions locally.
 7. Verifier retains only minimal decision evidence under policy.
 
-## Normal-flow disclosure target
+For the step-by-step sequence view, continue to [Flows and Topology](./FLOWS_AND_TOPOLOGY.md#normal-presentation-sequence).
+
+## Normal-Flow Disclosure Target
 The verifier should receive only:
 - threshold result
 - coarse assurance metadata
@@ -69,7 +100,7 @@ The verifier should receive only:
 - nonce binding
 - transaction-bound rightful-possession proof material that is not a stable verifier-visible holder identifier
 
-## Normal-flow exclusions
+## Normal-Flow Exclusions
 The verifier should not receive:
 - legal name
 - exact date of birth
@@ -79,7 +110,9 @@ The verifier should not receive:
 - a stable root credential reference
 - token-specific live issuer callbacks by default
 
-## Mermaid overview
+## Overview Diagram
+This diagram shows the default interaction pattern across issuer, wallet, verifier, trust, status, and governance actors. Read it as the single-page summary of the architecture thesis before moving into the detailed sequences.
+
 ```mermaid
 flowchart LR
     I[Issuer] -->|issues root credential| W[Wallet]
@@ -91,3 +124,9 @@ flowchart LR
     A[Auditor or certifier] -. governance and conformance .-> I
     A -. governance and conformance .-> V
 ```
+
+## Related Architecture Pages
+- [Flows and Topology](./FLOWS_AND_TOPOLOGY.md): context, sequence, privacy-boundary, and threat-control diagrams.
+- [Governance and Controls](./GOVERNANCE_AND_CONTROLS.md): issuer and verifier classes plus the control baseline.
+- [Dual Profile Overview](./DUAL_PROFILE_OVERVIEW.md): the rationale for the conservative and privacy-maximal profile split.
+- [Potential Final State](./POTENTIAL_FINAL_STATE.md): the mature-ecosystem target shape once conformance and governance are established.

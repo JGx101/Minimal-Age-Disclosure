@@ -1,0 +1,11 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Design discussion
+    url: https://github.com/JGx101/Minimal-Age-Disclosure/discussions
+    about: Use Discussions for open-ended architecture, standards, and governance conversation.
+  - name: Security or privacy report
+    url: https://github.com/JGx101/Minimal-Age-Disclosure/security/policy
+    about: Report sensitive vulnerabilities or privacy failures through the security policy path.
+  - name: Support guidance
+    url: https://github.com/JGx101/Minimal-Age-Disclosure/blob/main/SUPPORT.md
+    about: Read the engagement guide before opening a new issue.

@@ -1,6 +1,33 @@
 # Flows and Topology
 
-## System context
+> This page turns the architecture thesis into system context and interaction flows. Use it after [Architecture Overview](./ARCHITECTURE_OVERVIEW.md) when you want to see the moving parts in order.
+
+## In This Document
+- [How to read this page](#how-to-read-this-page)
+- [Quick links](#quick-links)
+- [System context](#system-context)
+- [Issuance sequence](#issuance-sequence)
+- [Normal presentation sequence](#normal-presentation-sequence)
+- [Privacy boundary](#privacy-boundary)
+- [Threat-to-control map](#threat-to-control-map)
+- [Related architecture pages](#related-architecture-pages)
+
+## How to Read This Page
+- Read the diagrams from top to bottom: context first, then issuance, then presentation.
+- Use the privacy boundary diagram to separate what stays inside the wallet from what crosses to the verifier.
+- Use the threat-to-control map as a bridge into [Governance and Controls](./GOVERNANCE_AND_CONTROLS.md).
+
+## Quick Links
+| For... | Go to... |
+| --- | --- |
+| the thesis behind these flows | [Architecture Overview](./ARCHITECTURE_OVERVIEW.md) |
+| control and policy interpretation | [Governance and Controls](./GOVERNANCE_AND_CONTROLS.md) |
+| profile-specific reading | [Dual Profile Overview](./DUAL_PROFILE_OVERVIEW.md) |
+| mature ecosystem assumptions | [Potential Final State](./POTENTIAL_FINAL_STATE.md) |
+
+## System Context
+This diagram identifies the main actors and the permitted trust and oversight relationships at system level. It is the quickest way to orient yourself before reading the sequences.
+
 ```mermaid
 flowchart LR
     H[Holder] --> W[Wallet]
@@ -12,7 +39,9 @@ flowchart LR
     R -. oversight .-> V
 ```
 
-## Issuance sequence
+## Issuance Sequence
+This sequence covers the one-time evidence check and root credential issuance path. The key boundary is that evidence checking happens once, while later verifier interactions depend on derived proofs rather than re-presenting the root credential.
+
 ```mermaid
 sequenceDiagram
     participant H as Holder
@@ -25,7 +54,9 @@ sequenceDiagram
     W->>W: store root credential locally
 ```
 
-## Normal presentation sequence
+## Normal Presentation Sequence
+This is the default verification path for minimal disclosure. The verifier asks for a threshold result plus transaction context, and the wallet returns a derived proof rather than identity data or the root credential.
+
 ```mermaid
 sequenceDiagram
     participant V as Verifier
@@ -43,7 +74,9 @@ sequenceDiagram
     V->>V: validate proof, audience, nonce, and validity
 ```
 
-## Privacy boundary
+## Privacy Boundary
+This diagram makes the normal-flow privacy boundary explicit. Root credentials and disclosure logs stay inside the wallet boundary, while only the verifier request and decision artifacts appear on the verifier side.
+
 ```mermaid
 flowchart TB
     subgraph Wallet boundary
@@ -71,7 +104,9 @@ flowchart TB
     DP --> VD
 ```
 
-## Threat-to-control map
+## Threat-to-Control Map
+Use this as a quick index from common failure modes to the architectural control intended to mitigate them. The control vocabulary is expanded in [Governance and Controls](./GOVERNANCE_AND_CONTROLS.md).
+
 ```mermaid
 flowchart TD
     T1[Over-collection] --> C1[Verifier policy and wallet rejection]
@@ -81,3 +116,9 @@ flowchart TD
     T5[Policy creep] --> C5[Conformance, audit, and sanctions]
     T6[Exception abuse] --> C6[Separate exception governance and monitoring]
 ```
+
+## Related Architecture Pages
+- [Architecture Overview](./ARCHITECTURE_OVERVIEW.md): the thesis, planes, and normal-flow disclosure objective.
+- [Governance and Controls](./GOVERNANCE_AND_CONTROLS.md): the control domains behind the threat map.
+- [Dual Profile Overview](./DUAL_PROFILE_OVERVIEW.md): how these flows vary in emphasis between `Profile R` and `Profile P`.
+- [Potential Final State](./POTENTIAL_FINAL_STATE.md): the future-state network these flows should fit into.
