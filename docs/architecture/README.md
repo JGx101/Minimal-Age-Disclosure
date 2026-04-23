@@ -17,7 +17,7 @@ This directory contains the canonical architecture set for the repository. If yo
 
 ## Quick map
 - `ARCHITECTURE_OVERVIEW.md`: high-level system shape and design intent
-- `FLOWS_AND_TOPOLOGY.md`: issuance, proof, verification, and trust boundaries
+- `FLOWS_AND_TOPOLOGY.md`: issuance, proof, verification, trust-resolution, retention, and recovery boundaries
 - `GOVERNANCE_AND_CONTROLS.md`: policy, oversight, and verifier-restraint mechanisms
 - `DUAL_PROFILE_OVERVIEW.md`: split between interoperable and privacy-maximal tracks
 - `POTENTIAL_FINAL_STATE.md`: target end-state direction after the accepted architecture decisions are implemented consistently
@@ -31,6 +31,8 @@ This directory contains the canonical architecture set for the repository. If yo
 ## Architecture rules that should stay invariant
 - The normal flow separates the root credential plane from the derived proof plane.
 - The ordinary verifier path is driven by minimal disclosure and transaction-bound proof generation.
+- Trust resolution starts from issuer class plus a minimised trust reference; exact issuer identity is exceptional to the trust path, not the default disclosure surface.
+- Verifier retention is narrower than verifier validation and must not store raw proof payloads or reusable binding artifacts by default.
 - The exceptional path is represented as a distinct governance boundary, not as the default behaviour.
 - Normal flow should not imply routine disclosure of exact DOB, legal name, document number, document image, or a stable verifier-visible identifier.
 

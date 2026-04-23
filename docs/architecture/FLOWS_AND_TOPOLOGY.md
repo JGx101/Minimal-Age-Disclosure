@@ -9,8 +9,15 @@
 - [Issuance sequence](#issuance-sequence)
 - [Normal presentation sequence](#normal-presentation-sequence)
 - [Binding-mode matrix](#binding-mode-matrix)
+- [Trust-resolution boundary](#trust-resolution-boundary)
 - [Privacy boundary](#privacy-boundary)
+- [Verifier retention boundary](#verifier-retention-boundary)
 - [Recovery and state domains](#recovery-and-state-domains)
+- [Lost-device lifecycle](#lost-device-lifecycle)
+- [Stolen-device or wallet-compromise lifecycle](#stolen-device-or-wallet-compromise-lifecycle)
+- [Device replacement and rebind lifecycle](#device-replacement-and-rebind-lifecycle)
+- [Mistaken suspension and appeal lifecycle](#mistaken-suspension-and-appeal-lifecycle)
+- [Issuer compromise and trust-withdrawal lifecycle](#issuer-compromise-and-trust-withdrawal-lifecycle)
 - [Exception red-path sequence](#exception-red-path-sequence)
 - [Threat-to-control map](#threat-to-control-map)
 - [Related architecture pages](#related-architecture-pages)
@@ -93,6 +100,25 @@ flowchart LR
     B2 --> U["No verifier-stable holder handle"]
 ```
 
+## Trust-Resolution Boundary
+Trust resolution defaults to issuer class plus a minimised trust reference. Exact issuer identity is used only when the selected trust path cannot validate the issuer from the coarse data.
+
+```mermaid
+flowchart TD
+    RQ["Verifier receives derived proof"] --> IC["Read issuer_class and issuer_trust_ref"]
+    IC --> TL["Check trust registry or trusted-list material"]
+    TL --> OK{"Trust validated?"}
+    OK -->|yes| ACCEPT["Continue proof validation"]
+    OK -->|no| NEED{"Exact issuer identity required by trust path?"}
+    NEED -->|no| REJECT["Reject proof"]
+    NEED -->|yes| RESOLVE["Resolve exact issuer identity for trust validation only"]
+    RESOLVE --> RETAIN{"Retention justified by verifier compliance rules?"}
+    RETAIN -->|no| DROP["Do not retain exact issuer identity by default"]
+    RETAIN -->|yes| AUDIT["Retain only under governed audit basis"]
+    DROP --> ACCEPT
+    AUDIT --> ACCEPT
+```
+
 ## Privacy Boundary
 This diagram makes the normal-flow privacy boundary explicit. Root credentials and disclosure logs stay inside the wallet boundary, while only the verifier request and decision artifacts appear on the verifier side.
 
@@ -123,6 +149,36 @@ flowchart TB
     RC --> DP
     BM --> DP
     DP --> VD
+```
+
+## Verifier Retention Boundary
+Verifier storage is intentionally narrower than verifier validation. A verifier may validate proof material during the transaction without retaining raw proof payloads, proof transcripts, unique status references, or fine-grained timestamps by default.
+
+```mermaid
+flowchart LR
+    subgraph "Transient validation only"
+        RAW["Raw proof payload"]
+        TRANSCRIPT["Raw proof transcript"]
+        STATUS["Unique status reference"]
+        CRYPTO_TIME["Raw cryptographic timestamp"]
+        EXACT_ISSUER["Exact issuer identity if resolved"]
+    end
+
+    subgraph "Default retained record"
+        OUTCOME["Decision outcome"]
+        TIME["Coarse time bucket"]
+        POLICY["Policy reference"]
+        REASON["Bounded audit reason"]
+        CLASS["Verifier class"]
+        MODE["Binding mode"]
+        EXC["Exception flag"]
+    end
+
+    RAW -. "MUST NOT retain by default" .-> OUTCOME
+    TRANSCRIPT -. "MUST NOT retain by default" .-> OUTCOME
+    STATUS -. "MUST NOT retain by default" .-> OUTCOME
+    CRYPTO_TIME -. "coarsen before retention" .-> TIME
+    EXACT_ISSUER -. "retain only if justified" .-> REASON
 ```
 
 ## Recovery and State Domains
@@ -161,6 +217,117 @@ flowchart TB
     W4 --> R4
     W2 --> R3
     W5 --> R5
+```
+
+## Lost-Device Lifecycle
+This sequence shows a loss report where compromise is not yet confirmed. The verifier path receives only generic validity outcomes; the recovery path does not receive ordinary presentation history.
+
+```mermaid
+sequenceDiagram
+    participant H as Holder
+    participant W as Wallet
+    participant RA as Recovery authority
+    participant I as Issuer
+    participant S as Status publisher or relay
+    participant V as Verifier
+
+    H->>W: report device lost
+    W->>RA: request recovery review
+    RA->>I: request temporary root suspension if needed
+    I->>S: publish root suspended or wallet lost_unconfirmed
+    V->>S: fetch batched or cacheable status
+    S-->>V: generic state evidence
+    V->>V: retry, soft-fail, or reject per freshness policy
+    RA->>H: offer restore, rebind, re-proof, or re-issuance path
+```
+
+## Stolen-Device or Wallet-Compromise Lifecycle
+This path is blocking once compromise is confirmed. Grace behavior is not allowed after the verifier has fresh evidence of confirmed compromise or revocation.
+
+```mermaid
+sequenceDiagram
+    participant H as Holder
+    participant W as Wallet
+    participant RA as Recovery authority
+    participant I as Issuer
+    participant S as Status publisher or relay
+    participant V as Verifier
+
+    H->>RA: report theft or suspected compromise
+    W->>RA: send local compromise signal if available
+    RA->>I: confirm compromise under governed evidence rules
+    I->>S: publish wallet compromised and root revoked or suspended
+    V->>S: fetch non-unique status evidence
+    S-->>V: status evidence without reason text
+    V->>V: reject affected derived proof
+    RA->>H: start replacement and re-proof or re-issuance
+```
+
+## Device Replacement and Rebind Lifecycle
+Replacement creates new wallet-bound authority. The normal verifier flow must not expose the previous device, old root credential, backup provider, appeal ticket, or rebind event.
+
+```mermaid
+sequenceDiagram
+    participant H as Holder
+    participant NW as New wallet
+    participant RA as Recovery authority
+    participant I as Issuer
+    participant S as Status publisher or relay
+    participant V as Verifier
+
+    H->>NW: initiate replacement
+    NW->>RA: prove holder control through chosen recovery architecture
+    RA->>I: request reissue or approve rebind
+    I->>NW: issue replacement root credential
+    I->>S: mark old root revoked, expired, or reissued
+    NW->>V: present normal transaction-bound derived proof
+    V->>S: validate permitted status evidence
+    V->>V: accept only if proof, trust, and freshness pass
+```
+
+## Mistaken Suspension and Appeal Lifecycle
+Appeals correct state through the same privacy-preserving propagation channels used for the original suspension. Verifiers see a generic unavailable or invalid result during review.
+
+```mermaid
+sequenceDiagram
+    participant H as Holder
+    participant W as Wallet
+    participant RA as Recovery authority
+    participant I as Issuer
+    participant S as Status publisher or relay
+    participant V as Verifier
+
+    H->>W: dispute suspension
+    W->>RA: submit appeal without presentation history
+    RA->>I: request review of root or wallet state
+    alt appeal succeeds
+        I->>S: publish corrected active or recovered state
+        W->>H: show holder recovery complete
+    else appeal fails
+        I->>S: keep suspended or publish revoked
+        W->>H: offer rebind or re-proofing where allowed
+    end
+    V->>S: fetch permitted status evidence
+    V->>V: receive only coarse validity result
+```
+
+## Issuer Compromise and Trust-Withdrawal Lifecycle
+Issuer compromise and trust withdrawal are ecosystem state changes, not holder recovery events. Trust-registry updates must be enough for verifiers to stop accepting affected proofs without consulting presentation logs.
+
+```mermaid
+sequenceDiagram
+    participant G as Governance authority
+    participant T as Trust registry
+    participant I as Issuer
+    participant W as Wallet
+    participant V as Verifier
+
+    G->>T: publish issuer under_review, suspended, withdrawn, or compromised
+    T-->>V: signed trust snapshot or trust proof
+    V->>V: reject affected issuer trust path once fresh
+    T-->>W: issuer trust update available
+    W->>I: request renewal only if issuer remains trusted or governance permits
+    W->>W: prompt holder for re-proofing or alternate issuer where needed
 ```
 
 ## Exception Red-Path Sequence

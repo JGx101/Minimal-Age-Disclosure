@@ -46,9 +46,15 @@ flowchart LR
     V1 --> T[Trust registry]
     V2 --> T
     VX --> T
+    T -. issuer class plus trust ref by default .-> V1
+    T -. exact issuer only if needed .-> V2
 
     V1 -. optional privacy-preserving freshness .-> S[Status relay]
     V2 -. optional privacy-preserving freshness .-> S
+
+    V1 --> R1[Minimal verifier retention]
+    V2 --> R2[Minimal verifier retention]
+    VX --> R3[Exceptional audit record]
 
     C[Certifier or auditor] -. conformance and audit .-> I1
     C -. conformance and audit .-> I2
@@ -67,6 +73,8 @@ flowchart LR
 - trusted-list or registry-based issuer validation
 - explicit `B0`, `B1`, and `B2` binding modes
 - separated issuer trust, root credential, and wallet compromise state domains
+- trust resolution that defaults to issuer class plus minimised trust reference
+- verifier retention that is narrower than verifier validation
 - privacy-preserving status only where justified
 - published profile and conformance suite
 - audit and sanctions for verifier abuse

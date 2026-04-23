@@ -9,6 +9,8 @@
 - [Verifier classes](#verifier-classes)
 - [Binding modes](#binding-modes)
 - [State domains](#state-domains)
+- [State-change authority](#state-change-authority)
+- [Trust and retention boundaries](#trust-and-retention-boundaries)
 - [Exception controls](#exception-controls)
 - [Governance principles](#governance-principles)
 - [Key controls](#key-controls)
@@ -54,6 +56,28 @@ No binding mode may expose a reusable verifier-visible proof-binding artifact in
 | Wallet compromise state | `normal`, `lost_unconfirmed`, `lost_confirmed`, `compromised`, `recovered`, `retired` |
 
 State changes must support recovery and compromise response without presentation logs.
+
+## State-Change Authority
+| Decision | Authorized actor |
+| --- | --- |
+| Suspend or revoke a root credential | Issuer, delegated recovery authority, or governance authority |
+| Confirm wallet compromise | Issuer or delegated recovery authority under governed evidence rules |
+| Reissue after recovery or replacement | Issuer |
+| Update issuer trust state | Trust registry or governance authority |
+| Publish status evidence | Issuer, trust registry, or delegated status publisher or relay |
+| Consume status evidence | Verifier, wallet, auditor, or governance authority |
+
+Verifiers may report suspected misuse, but they must not directly suspend a holder, confirm compromise, force re-issuance, or receive detailed recovery reason codes in normal flow.
+
+## Trust and Retention Boundaries
+| Boundary | Rule |
+| --- | --- |
+| Issuer trust validation | Default to issuer class plus `issuer_trust_ref`; resolve exact issuer identity only where required by the trust path. |
+| Exact issuer retention | Do not retain exact issuer identity by default unless compliance rules justify it. |
+| Proof validation | Raw proof payloads and proof transcripts may be processed transiently but must not be retained by default. |
+| Status evidence | Use batched, cacheable, relayable, or otherwise non-unique status evidence. |
+| Time data | Retain only approved coarse time buckets by default. |
+| `B1` continuity material | Treat as privacy-sensitive and do not retain as default telemetry. |
 
 ## Exception Controls
 - `V1` must not invoke exceptional disclosure.

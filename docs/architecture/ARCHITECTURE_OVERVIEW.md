@@ -132,8 +132,10 @@ flowchart LR
     W -->|stores root credential locally| W
     V[Verifier] -->|minimal request: threshold, audience, nonce, policy| W
     W -->|derived proof using B0, B1, or B2| V
-    V -->|issuer validation| T[Trust registry]
+    V -->|issuer class + trust ref| T[Trust registry]
+    T -. exact issuer only if needed .-> V
     V -. optional privacy-preserving status .-> S[Status service or relay]
+    V -->|minimal retained record| R[Verifier retention boundary]
     A[Auditor or certifier] -. governance and conformance .-> I
     A -. governance and conformance .-> V
 ```
