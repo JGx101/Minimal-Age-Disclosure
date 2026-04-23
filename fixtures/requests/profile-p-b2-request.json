@@ -1,0 +1,23 @@
+{
+  "fixture_id": "REQ-P-B2-001",
+  "kind": "request",
+  "profile_ref": "Profile P",
+  "expected_conformance": true,
+  "expected_failure_class": null,
+  "object": {
+    "object_type": "age_threshold_request",
+    "object_version": "1.0",
+    "profile_ref": "Profile P",
+    "verifier_class": "V1",
+    "requested_threshold": "over_18",
+    "audience": "https://privacy-verifier.example/age-check",
+    "nonce": "vWxYzAbCdEfGhIjKlMnOpQ",
+    "purpose": "privacy_maximal_age_gate",
+    "policy_ref": "policy:minimal-age:privacy-maximal-access",
+    "jurisdiction_ref": "EU",
+    "maximum_assurance_bucket": "AB2",
+    "binding_mode": "B2",
+    "freshness_requirement": "none",
+    "exception_requested": false
+  }
+}

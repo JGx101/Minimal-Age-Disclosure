@@ -318,6 +318,29 @@ Each test case includes:
 - Failure: governance and privacy
 - Source: exception governance
 
+## Fixture-backed automation map
+The first automation pass SHOULD evaluate the JSON fixtures under `fixtures/` before any wallet or verifier service code exists.
+
+| Fixture | Expected result | Primary coverage |
+| --- | --- | --- |
+| `fixtures/requests/profile-r-v1-b0-request.json` | conformant | request shape, `Profile R`, `V1`, `B0` |
+| `fixtures/requests/profile-r-v2-b1-request.json` | conformant | request shape, `Profile R`, `V2`, `B1` |
+| `fixtures/requests/profile-p-b2-request.json` | conformant | request shape, `Profile P`, `B2` |
+| `fixtures/requests/non-conformant-overcollection-request.json` | non-conformant | PNT-01, PNT-02, PNT-03 |
+| `fixtures/requests/non-conformant-exception-request.json` | non-conformant | PNT-28, PNT-29 |
+| `fixtures/responses/profile-r-v1-b0-response.json` | conformant | response shape, `B0` |
+| `fixtures/responses/profile-r-v2-b1-response.json` | conformant | response shape, `B1` |
+| `fixtures/responses/profile-p-b2-response.json` | conformant | response shape, `B2` |
+| `fixtures/responses/non-conformant-reusable-binding-response.json` | non-conformant | PNT-06, PNT-07, PNT-08 |
+| `fixtures/responses/non-conformant-metadata-fingerprint-response.json` | non-conformant | PNT-14, PNT-15, PNT-16, PNT-17 |
+| `fixtures/conformance/repeated-transaction-b1-same-verifier.json` | conformant scenario | CC-BIND-06, CC-FIX-06 |
+| `fixtures/conformance/repeated-transaction-cross-verifier.json` | conformant scenario | CC-BIND-03, CC-METADATA-05 |
+| `fixtures/conformance/verifier-retention-default-record.json` | conformant scenario | PNT-18, PNT-19 |
+| `fixtures/conformance/exception-thresholds-monthly.json` | non-conformant scenario | PNT-27, PNT-28, PNT-29, PNT-30 |
+| `fixtures/conformance/recovery-scenarios.json` | conformant scenario | PNT-20, PNT-21, PNT-24 |
+
+Additional automation MUST preserve the same failure classes and MUST NOT treat these fixtures as production protocol payloads.
+
 ### PNT-31: Exception volume exceeds thresholds
 - Threat: exception normalization
 - Actor: verifier, governance layer

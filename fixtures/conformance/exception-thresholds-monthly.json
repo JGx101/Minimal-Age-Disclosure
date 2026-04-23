@@ -1,0 +1,23 @@
+{
+  "fixture_id": "CONF-EXCEPTION-THRESHOLD-001",
+  "kind": "exception_scenario",
+  "profile_ref": "COMMON",
+  "expected_conformance": false,
+  "expected_failure_class": "exception_governance_failure",
+  "scenario": {
+    "calendar_month": "2026-04",
+    "verifier_id": "https://exception-heavy-verifier.example",
+    "verifier_class": "V2",
+    "total_age_check_transaction_count": 1000,
+    "exceptional_request_count": 118,
+    "monthly_exception_rate": 0.118,
+    "review_threshold_exceeded": true,
+    "failure_threshold_exceeded": true,
+    "scoped_exception_approval": {
+      "approved": false,
+      "reviewer_role": null,
+      "expiry": null
+    },
+    "expected_governance_result": "conformance_failure"
+  }
+}

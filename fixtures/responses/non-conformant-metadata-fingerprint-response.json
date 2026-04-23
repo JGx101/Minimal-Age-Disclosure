@@ -1,0 +1,50 @@
+{
+  "fixture_id": "RESP-NEG-METADATA-001",
+  "kind": "response",
+  "profile_ref": "Profile R",
+  "expected_conformance": false,
+  "expected_failure_class": "metadata_fingerprinting",
+  "object": {
+    "object_type": "age_threshold_response",
+    "object_version": "1.0",
+    "profile_ref": "Profile R",
+    "threshold_result": {
+      "threshold": "over_18",
+      "satisfied": true,
+      "result_code": "threshold_satisfied"
+    },
+    "assurance_bucket": "AB3-passport-scan-vendor-x-branch-17",
+    "issuer_class": "A1",
+    "issuer_trust_ref": {
+      "trust_framework_ref": "trust:minimal-age:gb",
+      "trust_resolution_method": "trust_registry",
+      "trust_list_entry_ref": "issuer-office-edinburgh-branch-17",
+      "exact_issuer_disclosed": true
+    },
+    "validity_window": {
+      "granularity": "millisecond",
+      "valid_from": "2026-04-23T15:14:02.123Z",
+      "valid_until": "2026-04-23T15:15:02.123Z",
+      "freshness_requirement_satisfied": true
+    },
+    "audience_binding": "present",
+    "nonce_binding": "present",
+    "binding_mode": "B0",
+    "possession_proof": {
+      "proof_type": "transaction_bound_placeholder",
+      "transcript_ref": "tx-proof-ref-metadata-negative"
+    },
+    "status_evidence": {
+      "status_check_type": "cacheable_status",
+      "status_ref": "unique-status-callback-holder-token-123",
+      "freshness_bucket": "2026-04-23T15:14:02.123Z",
+      "live_issuer_callback_allowed": false
+    },
+    "proof_format_ref": {
+      "proof_family": "other_governed",
+      "profile_id": "experimental-library-build-rare-2026-04-23",
+      "profile_version": "0.0.1-rare",
+      "correlation_scope": "verifier_transaction"
+    }
+  }
+}

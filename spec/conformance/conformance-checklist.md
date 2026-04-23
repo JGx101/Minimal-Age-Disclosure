@@ -117,3 +117,19 @@ Each checklist item includes:
 | CC-P-01 | Wallet, Verifier | P | Repeated-transaction test | Pass only if `Profile P` uses `B2` and satisfies stricter anti-correlation expectations than the common baseline. | Claim profile, metadata minimisation |
 | CC-P-02 | Wallet, Verifier | P | Proof review | Pass only if verifier-visible artifacts satisfy `B2` non-reusability constraints. | Root-vs-derived proof model |
 | CC-P-03 | Wallet, Verifier, Status service | P | Status-flow review | Fail if normal-flow status lets the verifier distinguish suspended, compromised, appealed, recovered, or replacement-device states for a holder. | Recovery and compromise |
+
+## CC-FIXTURES
+The fixture set under `fixtures/` is the first automation boundary. It does not require a wallet implementation.
+
+| ID | Actor | Scope | Evidence | Pass/Fail Rule | Source |
+| --- | --- | --- | --- | --- | --- |
+| CC-FIX-01 | Repository | COMMON | JSON parse check | Pass only if every `fixtures/**/*.json` file parses as JSON. | Claim profile |
+| CC-FIX-02 | Repository | COMMON | Fixture envelope inspection | Pass only if every fixture includes `fixture_id`, `kind`, `profile_ref`, `expected_conformance`, `expected_failure_class`, and `object` or `scenario`. | Claim profile |
+| CC-FIX-03 | Repository | COMMON | Fixture coverage check | Pass only if fixtures include conformant `Profile R` `V1`/`B0`, conformant `Profile R` `V2`/`B1`, and conformant `Profile P`/`B2` examples. | Claim profile, root-vs-derived proof model |
+| CC-FIX-04 | Repository | COMMON | Negative fixture coverage check | Pass only if fixtures include failures for over-collection, reusable binding artifacts, metadata fingerprinting, verifier retention, and exception governance. | Privacy-negative tests |
+| CC-FIX-05 | Repository | COMMON | Conformant fixture inspection | Fail if any conformant fixture contains exact DOB, legal name, document number, document image, stable holder identifier, stable root credential reference, unique status callback URI, or reusable verifier-visible proof-binding artifact. | Claim profile |
+| CC-FIX-06 | Wallet, Verifier | R | Fixture comparison | Pass only if `Profile R` `B1` fixtures show same-verifier and same-purpose continuity evidence without cross-verifier reuse. | Root-vs-derived proof model |
+| CC-FIX-07 | Wallet, Verifier | P | Fixture comparison | Pass only if `Profile P` `B2` fixtures show no verifier-stable holder handle in same-verifier or cross-verifier repetition. | Root-vs-derived proof model |
+| CC-FIX-08 | Verifier | COMMON | Retention fixture inspection | Fail if default verifier-retention fixtures store raw proof payloads, proof transcripts, unique status references, fine-grained timestamps, or reusable binding artifacts. | Retention spec |
+| CC-FIX-09 | Governance layer | COMMON | Exception threshold fixture | Pass only if exception review and failure rates are calculated from monthly verifier age-check volume. | Exception governance |
+| CC-FIX-10 | Issuer, Wallet, Trust registry | COMMON | Recovery scenario fixture | Pass only if lost-device, compromised-wallet, and issuer trust-withdrawal scenarios avoid issuer-visible presentation histories. | Recovery and compromise |

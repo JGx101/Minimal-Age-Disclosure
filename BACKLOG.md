@@ -4,7 +4,7 @@
 - Phase: documentation-first architecture and specification work
 - Overall posture: core architecture gaps resolved into accepted ADRs and normative specs
 - Implementation state: ready for prototype-interface review, not production build-out
-- Main blocker theme: concrete proof constructions and conformance automation remain to be selected
+- Main blocker theme: no active architecture blockers remain; future work is prototype validation, standards review, and automation depth
 
 ## What is already in place
 - [x] publish the layered architecture set under `docs/architecture/`
@@ -17,36 +17,42 @@
 - [x] define recovery actor responsibilities, state transitions, propagation, stale-state behavior, rebind, appeal, and lifecycle diagrams
 - [x] define exception eligibility, lawful-basis fields, red-path UX, audit triggers, and abuse thresholds
 - [x] update conformance and privacy-negative tests for the accepted architecture decisions
+- [x] close open implementation-profile and validation questions through specs, policy, prototype planning, and fixtures
+- [x] add fixture-backed examples for conformant and non-conformant request, response, retention, exception, recovery, and repeated-transaction cases
 
-## Active work
-- [ ] review the accepted interfaces against prototype feasibility
-- [ ] tighten non-recovery profile-specific conformance deltas for `Profile R` and `Profile P`
-- [ ] convert privacy-negative tests into fixture-backed checks
-- [ ] refine policy mapping language for UK and EU audiences
+## Non-blocking future research and validation
+- [ ] select and evaluate concrete libraries for the `Profile P` `B2` proof-family pattern
+- [ ] map the canonical objects to specific OpenID4VCI and OpenID4VP payload profiles
+- [ ] automate JSON Schema validation for the fixture set
+- [ ] implement repeated-transaction metadata fingerprinting checks against generated fixture batches
+- [ ] run external UK/EU policy review against the policy source categories
+- [ ] run standards feedback on the request/response object shape, binding modes, and metadata coarsening
 
 ## Upcoming milestones
 ### Milestone 1: prototype-interface review
-- [ ] map canonical request and response fields to mock issuer, wallet, verifier, and trust-registry behavior
-- [ ] define fixture examples for conformant `Profile R`, conformant `Profile P`, and non-conformant flows
-- [ ] define acceptance criteria for `B0`, `B1`, and `B2` demonstrations
+- [x] map canonical request and response fields to mock issuer, wallet, verifier, trust-registry, status relay, and governance/audit behavior
+- [x] define fixture examples for conformant `Profile R`, conformant `Profile P`, and non-conformant flows
+- [x] define acceptance criteria for `B0`, `B1`, and `B2` demonstrations
 
 ### Milestone 2: conformance automation
-- [ ] automate request-shape and response-shape checks
-- [ ] automate metadata-fingerprinting negative cases
-- [ ] automate verifier-retention and exception-threshold checks where feasible
+- [ ] automate request-shape and response-shape checks from fixtures
+- [ ] automate metadata-fingerprinting negative cases from repeated-transaction fixtures
+- [ ] automate verifier-retention and exception-threshold checks from fixture scenarios
 
 ### Milestone 3: policy and standards review
-- [ ] update UK/EU mapping against the accepted decisions
+- [x] define UK/EU source categories for verifier class and exception-governance mapping
 - [ ] distinguish implementation assumptions from policy claims
 - [ ] prepare focused issues for standards feedback on request/response shape, binding modes, and metadata coarsening
 
 ## Implementation entry criteria
 Prototype implementation should begin only when:
-- [ ] the accepted request and response objects are mapped to prototype fixtures
-- [ ] `B0`, `B1`, and `B2` expected behavior is testable
-- [ ] metadata minimisation constraints are represented in fixtures
-- [ ] recovery and compromise scenarios are selected
-- [ ] exception red-path behavior is represented at the interface level
+- [x] the accepted request and response objects are mapped to prototype fixtures
+- [x] `B0`, `B1`, and `B2` expected behavior is testable
+- [x] metadata minimisation constraints are represented in fixtures
+- [x] recovery and compromise scenarios are selected
+- [x] exception red-path behavior is represented at the interface level
+
+Prototype code remains gated on a separate implementation decision and review.
 
 ## Definition of roadmap progress
 An item counts as meaningfully complete when it produces one or more of:

@@ -106,3 +106,20 @@ A verifier MUST be treated as non-conformant if it retains by default:
 - exceptional-flow evidence without the required lawful-basis fields
 - exceptional-flow evidence outside the declared evidence-handling mode or retention period
 - exact issuer-resolved values, rare proof-format values, raw status responses, or token-specific freshness artifacts outside explicit exceptional governance
+
+## 9. Fixture-backed retention review
+The first retention automation SHOULD inspect fixture records before service code exists.
+
+A default verifier retention fixture MUST contain only:
+- decision outcome
+- approved coarse time bucket
+- policy reference
+- bounded audit reason
+- verifier class
+- binding mode
+- exception flag
+- non-unique trust or status reference where needed for audit
+
+A default verifier retention fixture MUST NOT contain raw proof payloads, raw proof transcripts, `B1` continuity material, unique status references, exact issuer identity, fine-grained timestamps, root credential references, stable holder data, or reusable proof-binding artifacts.
+
+The fixture `fixtures/conformance/verifier-retention-default-record.json` is the baseline positive example. Negative retention examples MUST identify `over_retention` as their expected failure class.

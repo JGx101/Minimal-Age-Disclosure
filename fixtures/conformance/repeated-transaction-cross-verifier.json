@@ -1,0 +1,35 @@
+{
+  "fixture_id": "CONF-CROSS-VERIFIER-001",
+  "kind": "conformance_scenario",
+  "profile_ref": "COMMON",
+  "expected_conformance": true,
+  "expected_failure_class": null,
+  "scenario": {
+    "comparisons": [
+      {
+        "binding_mode": "B1",
+        "audiences": [
+          "https://high-assurance-verifier-a.example/age-check",
+          "https://high-assurance-verifier-b.example/age-check"
+        ],
+        "expected_evidence": {
+          "cross_verifier_continuity_reuse": false,
+          "shared_holder_handle_visible": false,
+          "shared_status_reference_unique_to_holder": false
+        }
+      },
+      {
+        "binding_mode": "B2",
+        "audiences": [
+          "https://privacy-verifier-a.example/age-check",
+          "https://privacy-verifier-b.example/age-check"
+        ],
+        "expected_evidence": {
+          "same_verifier_linkability": false,
+          "cross_verifier_linkability": false,
+          "verifier_stable_binding_handle_visible": false
+        }
+      }
+    ]
+  }
+}

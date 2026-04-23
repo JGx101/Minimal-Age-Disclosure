@@ -910,7 +910,56 @@ Where a machine-readable refusal is returned, the wallet MUST use the wallet ref
 
 `Profile R` implementations MUST NOT permit `B1` pairwise material to become cross-verifier correlation material.
 
+`Profile R` SHOULD use OpenID4VCI for issuance of the wallet-held authority or root credential and OpenID4VP for presentation of the derived proof.
+
+OpenID4VCI in `Profile R` MUST NOT be interpreted as permission to make issuance identifiers, credential IDs, issuer-side session handles, or holder-binding metadata verifier-visible in the normal flow.
+
+OpenID4VP in `Profile R` MUST carry or bind the verifier audience, nonce, policy reference, binding mode, freshness requirement, and proof-format reference without adding holder-specific, credential-specific, or token-specific correlation handles.
+
+Where the canonical request or response object is represented through transport-specific fields, the mapping MUST be documented and MUST be testable against the fixture format in Section 13.
+
 ### 12.2 Profile P
 `Profile P` implementations MUST use `B2` for normal-flow presentations.
 
 `Profile P` implementations MUST NOT expose verifier-stable proof-binding artifacts in the normal flow.
+
+The first `Profile P` prototype SHOULD use a BBS-style or equivalent unlinkable selective-disclosure proof-family pattern as defined in `spec/root-derived-proof/root-vs-derived-proof-model.md`.
+
+## 13. Fixture format
+The repository fixtures under `fixtures/` are conformance examples, not production wire formats.
+
+Each JSON fixture MUST contain:
+- `fixture_id`
+- `kind`
+- `profile_ref`
+- `expected_conformance`
+- `expected_failure_class`
+- `object` or `scenario`
+
+`fixture_id` MUST be stable within the repository.
+
+`kind` MUST be one of:
+- `request`
+- `response`
+- `conformance_scenario`
+- `retention_record`
+- `exception_scenario`
+- `recovery_scenario`
+
+`expected_conformance` MUST be `true` or `false`.
+
+`expected_failure_class` MUST be `null` when `expected_conformance` is `true`.
+
+For non-conformant fixtures, `expected_failure_class` MUST identify the primary failure class, such as:
+- `over_collection`
+- `reusable_binding_artifact`
+- `metadata_fingerprinting`
+- `over_retention`
+- `exception_governance_failure`
+- `recovery_privacy_failure`
+- `request_shape_failure`
+- `response_shape_failure`
+
+Conformant fixtures MUST NOT contain exact DOB, legal name, document number, document image, stable holder identifier, stable root credential reference, unique status callback URI, or reusable verifier-visible proof-binding artifact.
+
+Non-conformant fixtures MAY contain forbidden fields only where the fixture explicitly demonstrates the expected failure class.

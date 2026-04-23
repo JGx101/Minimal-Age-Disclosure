@@ -279,6 +279,34 @@ Unacceptable `B2` instantiations include:
 - a pairwise verifier handle retained as part of the proof-binding layer
 - unique status evidence that can be joined with the proof transcript
 
+### A.6 First `Profile P` prototype proof-family pattern
+The first `Profile P` prototype SHOULD instantiate `B2` using a BBS-style selective-disclosure proof family or an equivalent unlinkable anonymous-credential or zero-knowledge proof family.
+
+This requirement defines the prototype proof-family pattern only. It MUST NOT be interpreted as a mandatory production library choice.
+
+The selected `B2` prototype proof family MUST provide evaluation evidence for all of the following:
+- unlinkability across repeated presentations to the same verifier
+- unlinkability across different verifier audiences
+- proof-specific randomness or equivalent non-reuse property
+- nonce binding and audience binding
+- disclosure of the age-threshold predicate without exact DOB, legal name, document number, document image, stable holder identifier, stable root credential reference, unique status callback URI, or reusable proof-binding artifact
+- compatibility with metadata coarsening and fixture-backed conformance checks
+
+If a candidate proof family cannot satisfy these criteria without adding a verifier-stable pseudonym, static holder key, unique status reference, or rare proof-format fingerprint, it MUST NOT be used to claim `Profile P` normal-flow conformance.
+
+### A.7 `Profile R` rails and `B1` evidence
+`Profile R` SHOULD use OpenID4VCI for issuance of the wallet-held authority or root credential and OpenID4VP for presentation of the derived proof.
+
+The canonical request and response objects defined in `spec/claim-profile/age-threshold-proof-profile.md` MAY be carried as profile-constrained claims, presentation metadata, or governed request/response envelopes on those rails. Transport mapping MUST NOT weaken the canonical object fields, metadata coarsening rules, binding-mode rules, or retention rules.
+
+Automated `B1` evidence MUST include:
+- same-verifier and same-purpose continuity checks where `B1` continuity is claimed
+- cross-verifier non-reuse checks using at least two canonical verifier audiences
+- policy-purpose separation checks showing that continuity material for one declared purpose is not accepted for an unrelated purpose
+- retained-record inspection showing that `B1` continuity material is not stored as default telemetry
+
+A `B1` implementation MUST fail conformance if any proof transcript, continuity value, public key, status reference, policy reference, or retained record can be reused to correlate the holder across verifier audiences.
+
 ## Appendix B. Proof-family mapping note
 This table is a profile mapping note. It does not assert that every current implementation of a named family already satisfies the binding mode without additional profile constraints.
 

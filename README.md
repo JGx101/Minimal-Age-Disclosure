@@ -113,6 +113,8 @@ Completed baseline:
 - common governance model and dual-profile framing published
 - normative core spec set drafted
 - conformance checklist and privacy-negative test catalog drafted
+- open implementation-profile questions closed for the current documentation-first phase
+- fixture-backed examples added for requests, responses, metadata, retention, exceptions, and recovery
 - prototype work intentionally kept at planning level
 
 Recently settled:
@@ -124,6 +126,8 @@ Recently settled:
 - freshness and validity granularity
 - verifier audit minimum
 - exception-path abuse thresholds
+- `Profile P` first proof-family pattern: BBS-style or equivalent unlinkable selective-disclosure proofs
+- `Profile R` rails: OpenID4VCI issuance and OpenID4VP presentation, constrained by the canonical objects
 
 ## Profiles
 
@@ -188,6 +192,7 @@ These are not minor details. They define whether the architecture remains minima
 - [Metadata Minimisation](spec/privacy/metadata-minimisation.md)
 - [Conformance Checklist](spec/conformance/conformance-checklist.md)
 - [Privacy-Negative Test Cases](spec/conformance/privacy-negative-test-cases.md)
+- [Fixture Examples](fixtures/README.md)
 
 ### Governance and Policy
 
@@ -198,6 +203,7 @@ These are not minor details. They define whether the architecture remains minima
 
 ### Research and Planning
 
+- [Open Question Closure Log](docs/research/open-question-closure-log.md)
 - [Repo Review and Roadmap](docs/research/repo-review-and-roadmap.md)
 - [Revocation and Status Tradeoff Analysis](docs/research/revocation-status-tradeoff-analysis.md)
 - [Prototype Implementation Plan](prototype/implementation-plan.md)
@@ -247,8 +253,8 @@ The highest-value engagement is specific critique. If a section overstates priva
 
 The current direction is:
 
-1. review the accepted architecture decisions against prototype feasibility
-2. promote draft normative clauses into a more stable baseline
-3. tighten profile-specific conformance deltas for Profile R and Profile P
+1. automate fixture-backed request, response, metadata, retention, exception, and recovery checks
+2. map the canonical objects to concrete OpenID4VCI and OpenID4VP payload profiles
+3. evaluate concrete `Profile P` `B2` proof libraries against the unlinkability criteria
 4. refine UK and EU policy mapping without overstating likely acceptance
-5. begin narrow implementation work only after the accepted interfaces are validated against prototype feasibility
+5. begin narrow implementation work only after the accepted interfaces pass fixture-backed review

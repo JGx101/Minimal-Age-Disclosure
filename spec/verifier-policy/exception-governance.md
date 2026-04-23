@@ -341,6 +341,44 @@ Repeated review triggers across two consecutive months MUST be treated as a conf
 
 Any missing lawful-basis field MUST be treated as non-conformant regardless of volume.
 
+### 12.1 Threshold calculation
+Governance MUST calculate exception thresholds from monthly verifier age-check volume.
+
+The denominator MUST include all age-check transactions for the verifier in the calendar month, including accepted normal-flow checks, refused normal-flow checks, failed normal-flow checks, exceptional checks, and exceptional refusals.
+
+The numerator MUST include all exceptional requests sent or attempted by that verifier during the same calendar month, including requests refused by the wallet and requests later withdrawn by the verifier.
+
+The monthly exception rate MUST be calculated as:
+
+```text
+monthly_exception_rate = exceptional_request_count / total_age_check_transaction_count
+```
+
+If the denominator is too small for a stable percentage, governance MUST still review any pattern suggesting default exceptional use, repeated missing lawful-basis fields, or `V1` exception attempts.
+
+### 12.2 Scoped exception approval
+A scoped exception class MAY be approved only by an independent reviewer such as a governance board, privacy office, compliance function, trust-framework operator, or approved certifier.
+
+The approval evidence package MUST include:
+- verifier identity and verifier class
+- jurisdiction and policy context
+- use case code
+- lawful-basis code and reference
+- normal-path insufficiency evidence
+- requested extra fields and field-necessity map
+- evidence-handling mode
+- retention period and disposal action
+- expected monthly exception volume and percentage
+- red-path UX text or equivalent holder-facing disclosure
+- audit contact and review or appeal reference
+- expiry date and re-review date
+
+A scoped exception approval MUST expire no later than `12` months after approval unless the governing authority requires a shorter period.
+
+Renewal MUST require re-review. Prior approval MUST NOT automatically renew the exception class.
+
+Scoped approval MAY prevent the `10%` threshold from being an immediate conformance failure only for the approved verifier, jurisdiction, use case, requested fields, and expiry period. It MUST NOT make the exceptional path part of normal-flow conformance.
+
 ## 13. Exception evidence handling and retention
 Extra fields collected during an exceptional flow MUST be handled under the declared `evidence_handling` mode.
 

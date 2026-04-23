@@ -1,0 +1,23 @@
+{
+  "fixture_id": "REQ-R-V2-B1-001",
+  "kind": "request",
+  "profile_ref": "Profile R",
+  "expected_conformance": true,
+  "expected_failure_class": null,
+  "object": {
+    "object_type": "age_threshold_request",
+    "object_version": "1.0",
+    "profile_ref": "Profile R",
+    "verifier_class": "V2",
+    "requested_threshold": "over_18",
+    "audience": "https://high-assurance-verifier.example/age-check",
+    "nonce": "aBcDeFgHiJkLmNoPqRsTuV",
+    "purpose": "regulated_high_assurance_access",
+    "policy_ref": "policy:minimal-age:high-assurance-access",
+    "jurisdiction_ref": "GB",
+    "maximum_assurance_bucket": "AB3",
+    "binding_mode": "B1",
+    "freshness_requirement": "wallet_compromise_state",
+    "exception_requested": false
+  }
+}

@@ -1,0 +1,35 @@
+{
+  "fixture_id": "CONF-RECOVERY-001",
+  "kind": "recovery_scenario",
+  "profile_ref": "COMMON",
+  "expected_conformance": true,
+  "expected_failure_class": null,
+  "scenario": {
+    "cases": [
+      {
+        "case_id": "lost-device-unconfirmed",
+        "issuer_trust_state": "trusted",
+        "root_credential_state": "suspended",
+        "wallet_compromise_state": "lost_unconfirmed",
+        "verifier_visible_result": "unavailable",
+        "issuer_receives_presentation_history": false
+      },
+      {
+        "case_id": "confirmed-compromised-wallet",
+        "issuer_trust_state": "trusted",
+        "root_credential_state": "revoked",
+        "wallet_compromise_state": "compromised",
+        "verifier_visible_result": "invalid",
+        "issuer_receives_presentation_history": false
+      },
+      {
+        "case_id": "issuer-trust-withdrawal",
+        "issuer_trust_state": "withdrawn",
+        "root_credential_state": "active",
+        "wallet_compromise_state": "normal",
+        "verifier_visible_result": "trust_validation_failed",
+        "issuer_receives_presentation_history": false
+      }
+    ]
+  }
+}

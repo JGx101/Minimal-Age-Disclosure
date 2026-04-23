@@ -247,6 +247,26 @@ Budget scoring MUST include cross-field effects. If two fields are harmless alon
 
 `B2` possession evidence MUST be unlinkable and MUST NOT expose verifier-stable holder handles.
 
+## 14.1 Repeated-transaction fingerprinting evidence
+Conformance review MUST include repeated-transaction analysis for the same verifier and for different verifier audiences.
+
+The review MUST compare at least:
+- request objects
+- response objects
+- proof-format references
+- status evidence
+- issuer trust references
+- policy and jurisdiction references
+- validity windows
+- verifier retention records
+- `B1` continuity material where present
+
+Repeated-transaction tests MUST fail if they find any normal-flow value that is stable because it identifies the holder, root credential, wallet instance, proof-binding artifact, unique status reference, rare proof-format value, precise timestamp, or holder-specific policy context.
+
+For `B1`, same-verifier and same-purpose continuity MAY be present only under the `B1` retention rule. Cross-verifier comparison MUST show that the continuity material cannot be reused across verifier audiences.
+
+For `B2`, same-verifier and cross-verifier comparison MUST show no verifier-stable holder handle, no pairwise pseudonym, and no reusable proof-binding artifact.
+
 ## 15. Conformant metadata bundles
 The following examples are conformant metadata bundles. They are examples of metadata shape, not mandatory literal values.
 

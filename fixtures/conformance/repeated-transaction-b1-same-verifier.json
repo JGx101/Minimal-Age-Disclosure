@@ -1,0 +1,30 @@
+{
+  "fixture_id": "CONF-B1-SAME-VERIFIER-001",
+  "kind": "conformance_scenario",
+  "profile_ref": "Profile R",
+  "expected_conformance": true,
+  "expected_failure_class": null,
+  "scenario": {
+    "binding_mode": "B1",
+    "verifier_class": "V2",
+    "audience": "https://high-assurance-verifier.example/age-check",
+    "purpose": "regulated_high_assurance_access",
+    "transactions": [
+      {
+        "nonce": "b1SameVerifierNonce0001",
+        "proof_transcript": "fresh-transcript-a",
+        "continuity_scope": "same_verifier_same_purpose"
+      },
+      {
+        "nonce": "b1SameVerifierNonce0002",
+        "proof_transcript": "fresh-transcript-b",
+        "continuity_scope": "same_verifier_same_purpose"
+      }
+    ],
+    "expected_evidence": {
+      "proof_transcripts_are_distinct": true,
+      "continuity_scope_is_same_verifier_only": true,
+      "default_retention_excludes_continuity_material": true
+    }
+  }
+}

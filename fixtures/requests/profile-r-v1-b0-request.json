@@ -1,0 +1,23 @@
+{
+  "fixture_id": "REQ-R-V1-B0-001",
+  "kind": "request",
+  "profile_ref": "Profile R",
+  "expected_conformance": true,
+  "expected_failure_class": null,
+  "object": {
+    "object_type": "age_threshold_request",
+    "object_version": "1.0",
+    "profile_ref": "Profile R",
+    "verifier_class": "V1",
+    "requested_threshold": "over_18",
+    "audience": "https://verifier.example/age-check",
+    "nonce": "9zYxwVuTsRqPoNmLkJiHgF",
+    "purpose": "age_restricted_access",
+    "policy_ref": "policy:minimal-age:standard-access",
+    "jurisdiction_ref": "GB",
+    "maximum_assurance_bucket": "AB2",
+    "binding_mode": "B0",
+    "freshness_requirement": "issuer_trust_state",
+    "exception_requested": false
+  }
+}

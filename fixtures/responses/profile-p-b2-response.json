@@ -1,0 +1,47 @@
+{
+  "fixture_id": "RESP-P-B2-001",
+  "kind": "response",
+  "profile_ref": "Profile P",
+  "expected_conformance": true,
+  "expected_failure_class": null,
+  "object": {
+    "object_type": "age_threshold_response",
+    "object_version": "1.0",
+    "profile_ref": "Profile P",
+    "threshold_result": {
+      "threshold": "over_18",
+      "satisfied": true,
+      "result_code": "threshold_satisfied"
+    },
+    "assurance_bucket": "AB2",
+    "issuer_class": "A2",
+    "issuer_trust_ref": {
+      "trust_framework_ref": "trust:minimal-age:eu-privacy-profile",
+      "trust_resolution_method": "cryptographic_accumulator",
+      "trust_list_entry_ref": "issuer-class:A2:epoch-2026-04",
+      "exact_issuer_disclosed": false
+    },
+    "validity_window": {
+      "granularity": "date",
+      "valid_until": "2026-04-24",
+      "freshness_requirement_satisfied": true
+    },
+    "audience_binding": "present",
+    "nonce_binding": "present",
+    "binding_mode": "B2",
+    "possession_proof": {
+      "proof_type": "bbs_style_unlinkable_placeholder",
+      "unlinkability_scope": "same_and_cross_verifier"
+    },
+    "status_evidence": {
+      "status_check_type": "none",
+      "live_issuer_callback_allowed": false
+    },
+    "proof_format_ref": {
+      "proof_family": "bbs",
+      "profile_id": "profile-p-age-threshold-unlinkable",
+      "profile_version": "1.0",
+      "correlation_scope": "none"
+    }
+  }
+}

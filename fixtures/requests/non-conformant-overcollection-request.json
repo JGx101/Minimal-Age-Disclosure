@@ -1,0 +1,28 @@
+{
+  "fixture_id": "REQ-NEG-OVERCOLLECT-001",
+  "kind": "request",
+  "profile_ref": "Profile R",
+  "expected_conformance": false,
+  "expected_failure_class": "over_collection",
+  "object": {
+    "object_type": "age_threshold_request",
+    "object_version": "1.0",
+    "profile_ref": "Profile R",
+    "verifier_class": "V1",
+    "requested_threshold": "over_18",
+    "audience": "https://overcollecting-verifier.example/age-check",
+    "nonce": "oVeRcOlLeCtIoNnOnCe001",
+    "purpose": "age_restricted_access",
+    "policy_ref": "policy:minimal-age:standard-access",
+    "jurisdiction_ref": "GB",
+    "maximum_assurance_bucket": "AB2",
+    "binding_mode": "B0",
+    "freshness_requirement": "issuer_trust_state",
+    "exception_requested": false,
+    "requested_extra_fields": [
+      "exact_dob",
+      "legal_name",
+      "document_number"
+    ]
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "fixture_id": "CONF-RETENTION-DEFAULT-001",
+  "kind": "retention_record",
+  "profile_ref": "COMMON",
+  "expected_conformance": true,
+  "expected_failure_class": null,
+  "object": {
+    "decision_outcome": "threshold_satisfied",
+    "time_bucket": "2026-04-23",
+    "policy_ref": "policy:minimal-age:standard-access",
+    "bounded_audit_reason": "normal_age_gate",
+    "verifier_class": "V1",
+    "binding_mode": "B0",
+    "exception_flag": false,
+    "issuer_class": "A1",
+    "trust_reference": "trust:minimal-age:gb",
+    "status_class": "issuer_trust_state"
+  }
+}
