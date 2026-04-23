@@ -12,6 +12,8 @@ Conformance tests check whether issuer, wallet, verifier, and ecosystem behavior
 - trust, nonce, audience, binding mode, and validity are enforced
 - issuer trust, root credential, and wallet compromise state domains are respected
 - metadata coarsening rules are enforced
+- policy and jurisdiction registry discipline is enforced
+- cross-field anti-fingerprinting budgets are enforced
 - retention rules are respected
 - exception handling remains outside normal conformance
 

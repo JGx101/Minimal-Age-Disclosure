@@ -46,6 +46,12 @@ A conformant verifier MUST set `exception_requested` to `false` for normal-flow 
 
 A verifier MUST NOT request a binding mode that creates cross-verifier correlation in normal flow.
 
+A verifier MUST NOT request `B1` solely to force sticky same-verifier continuity where the governing rule can be satisfied by `B0` or `B2`.
+
+A verifier MUST NOT treat `B0` as a silent fallback for `B1`.
+
+A verifier MAY accept `B2` instead of `B1` only where the governing policy does not require `B1` same-verifier continuity and the request or profile explicitly allows that alternative.
+
 ## 5. Freshness policy
 `freshness_requirement` MUST be one of:
 - `none`
@@ -65,6 +71,10 @@ A conformant verifier MAY request only:
 - the binding mode required by verifier class and profile
 - permitted freshness evidence
 
+A conformant verifier MUST use `policy_ref` and `jurisdiction_ref` values from governed registries or controlled public enumerations.
+
+A conformant verifier MUST run the metadata cross-field review in `spec/privacy/metadata-minimisation.md` before deploying a normal-flow request profile.
+
 ## 7. Forbidden normal-flow requests
 A conformant verifier MUST NOT request in the normal flow:
 - legal name
@@ -78,6 +88,7 @@ A conformant verifier MUST NOT request in the normal flow:
 - unique status callback URI
 - token-specific live issuer callbacks
 - exceptional disclosure fields
+- policy, jurisdiction, issuer, status, proof-format, or timestamp values that become practical correlators in combination
 
 ## 8. Wallet handling of verifier requests
 A conformant wallet MUST:
@@ -86,6 +97,8 @@ A conformant wallet MUST:
 - reject or refuse requests missing `nonce`
 - reject or refuse requests containing forbidden normal-flow fields
 - reject or refuse requests with impermissible binding modes
+- reject or refuse unsupported binding modes unless a new conformant request explicitly permits an alternative mode
+- reject or refuse attempts to force `B1` continuity for ineligible or unrelated purposes
 - derive a verifier-facing proof rather than disclose the root credential
 - route exceptional requests to the red-path UX defined by exception governance
 
@@ -101,6 +114,7 @@ A conformant verifier MUST:
 - validate audience binding and nonce binding
 - validate bounded validity information
 - validate binding mode eligibility
+- validate that the response binding mode matches the request or an explicitly permitted alternative
 - remain within the permissions of its verifier class
 - keep exceptional handling outside normal-flow conformance
 
@@ -121,6 +135,10 @@ A conformant verifier MUST treat retention beyond that minimum as either:
 Any request outside the allowed normal-flow rules in this specification MUST be treated as exceptional.
 
 Any interaction that depends on exceptional disclosure MUST be treated as outside normal-flow conformance and MUST satisfy `spec/verifier-policy/exception-governance.md`.
+
+A verifier MUST NOT invoke exceptional disclosure unless the normal-path insufficiency test in the exception-governance specification passes.
+
+A service that requires exceptional disclosure for ordinary access, or uses exceptional disclosure as the default journey, MUST be treated as exception-by-design and MUST NOT be presented as conformant normal flow.
 
 ## 12. Profile-specific notes
 ### 12.1 Profile R

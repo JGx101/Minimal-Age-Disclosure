@@ -8,9 +8,9 @@ This file tracks genuinely remaining questions after the accepted architecture d
 - Move a question out of this file when it is reflected in an ADR, a normative spec update, a conformance condition, or a prototype acceptance criterion.
 
 ## Priority 1: proof construction and implementation profile
-1. Which concrete proof construction should a `Profile P` implementation use for `B2`?
+1. Which standards proof family should the first `Profile P` prototype instantiate for the `B2` mechanism pattern?
 2. Which mainstream `Profile R` rails can best carry the canonical request and response objects without weakening the metadata rules?
-3. What implementation evidence is sufficient to prove that `B1` material is verifier-scoped and not cross-verifier reusable?
+3. What automated evidence is sufficient to prove that a chosen `B1` implementation keeps continuity material same-verifier and same-purpose scoped?
 
 ## Priority 2: conformance automation
 4. Which privacy-negative tests can be automated first without implementing a full wallet?

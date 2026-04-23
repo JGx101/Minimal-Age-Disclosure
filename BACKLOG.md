@@ -14,12 +14,13 @@
 - [x] define `B0`, `B1`, and `B2` binding modes
 - [x] define metadata coarsening rules and prohibited correlators
 - [x] define issuer trust, root credential, and wallet compromise states
+- [x] define recovery actor responsibilities, state transitions, propagation, stale-state behavior, rebind, appeal, and lifecycle diagrams
 - [x] define exception eligibility, lawful-basis fields, red-path UX, audit triggers, and abuse thresholds
 - [x] update conformance and privacy-negative tests for the accepted architecture decisions
 
 ## Active work
 - [ ] review the accepted interfaces against prototype feasibility
-- [ ] tighten profile-specific conformance deltas for `Profile R` and `Profile P`
+- [ ] tighten non-recovery profile-specific conformance deltas for `Profile R` and `Profile P`
 - [ ] convert privacy-negative tests into fixture-backed checks
 - [ ] refine policy mapping language for UK and EU audiences
 
