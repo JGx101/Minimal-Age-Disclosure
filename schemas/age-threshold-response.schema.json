@@ -24,6 +24,42 @@
     "object_type": { "const": "age_threshold_response" },
     "object_version": { "const": "1.0" },
     "profile_ref": { "enum": ["Profile R", "Profile P"] },
+    "threshold_result": { "$ref": "#/$defs/threshold_result" },
+    "assurance_bucket": { "enum": ["AB1", "AB2", "AB3"] },
+    "issuer_class": { "enum": ["A0", "A1", "A2"] },
+    "issuer_trust_ref": { "$ref": "#/$defs/issuer_trust_ref" },
+    "validity_window": { "$ref": "#/$defs/validity_window" },
+    "audience_binding": { "const": "present" },
+    "nonce_binding": { "const": "present" },
+    "binding_mode": { "enum": ["B0", "B1", "B2"] },
+    "possession_proof": {
+      "oneOf": [
+        { "type": "string", "minLength": 1, "maxLength": 4096 },
+        { "type": "object", "minProperties": 1, "additionalProperties": true }
+      ]
+    },
+    "status_evidence": { "$ref": "#/$defs/status_evidence" },
+    "proof_format_ref": { "$ref": "#/$defs/proof_format_ref" }
+  },
+  "allOf": [
+    {
+      "if": { "properties": { "profile_ref": { "const": "Profile P" } }, "required": ["profile_ref"] },
+      "then": { "properties": { "binding_mode": { "const": "B2" } } }
+    },
+    {
+      "if": { "properties": { "binding_mode": { "const": "B2" } }, "required": ["binding_mode"] },
+      "then": {
+        "properties": {
+          "proof_format_ref": {
+            "properties": {
+              "correlation_scope": { "enum": ["none", "verifier_transaction"] }
+            }
+          }
+        }
+      }
+    }
+  ],
+  "$defs": {
     "threshold_result": {
       "type": "object",
       "additionalProperties": false,
@@ -32,17 +68,71 @@
         "threshold": { "enum": ["over_13", "over_16", "over_18", "over_21"] },
         "satisfied": { "type": "boolean" },
         "result_code": { "enum": ["threshold_satisfied", "threshold_not_satisfied"] }
+      },
+      "allOf": [
+        {
+          "if": { "properties": { "satisfied": { "const": true } }, "required": ["satisfied"] },
+          "then": { "properties": { "result_code": { "const": "threshold_satisfied" } } }
+        },
+        {
+          "if": { "properties": { "satisfied": { "const": false } }, "required": ["satisfied"] },
+          "then": { "properties": { "result_code": { "const": "threshold_not_satisfied" } } }
+        }
+      ]
+    },
+    "issuer_trust_ref": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["trust_framework_ref", "trust_resolution_method", "exact_issuer_disclosed"],
+      "properties": {
+        "trust_framework_ref": { "type": "string", "minLength": 1, "maxLength": 160 },
+        "trust_resolution_method": { "enum": ["trust_list", "trust_registry", "cryptographic_accumulator", "governance_profile"] },
+        "trust_list_entry_ref": { "type": "string", "minLength": 1, "maxLength": 160 },
+        "exact_issuer_disclosed": { "type": "boolean" }
       }
     },
-    "assurance_bucket": { "enum": ["AB1", "AB2", "AB3"] },
-    "issuer_class": { "enum": ["A0", "A1", "A2"] },
-    "issuer_trust_ref": { "type": "object" },
-    "validity_window": { "type": "object" },
-    "audience_binding": { "const": "present" },
-    "nonce_binding": { "const": "present" },
-    "binding_mode": { "enum": ["B0", "B1", "B2"] },
-    "possession_proof": { "type": ["object", "string"] },
-    "status_evidence": { "type": "object" },
-    "proof_format_ref": { "type": "object" }
+    "validity_window": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["granularity", "valid_until", "freshness_requirement_satisfied"],
+      "properties": {
+        "granularity": { "enum": ["date", "hour"] },
+        "valid_from": { "type": "string" },
+        "valid_until": { "type": "string" },
+        "freshness_requirement_satisfied": { "type": "boolean" }
+      },
+      "allOf": [
+        {
+          "if": { "properties": { "granularity": { "const": "date" } }, "required": ["granularity"] },
+          "then": { "properties": { "valid_from": { "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$" }, "valid_until": { "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$" } } }
+        },
+        {
+          "if": { "properties": { "granularity": { "const": "hour" } }, "required": ["granularity"] },
+          "then": { "properties": { "valid_from": { "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:00Z$" }, "valid_until": { "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:00Z$" } } }
+        }
+      ]
+    },
+    "status_evidence": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["status_check_type", "live_issuer_callback_allowed"],
+      "properties": {
+        "status_check_type": { "enum": ["none", "batched_status", "cacheable_status", "relayable_status", "issuer_trust_state", "root_credential_state", "wallet_compromise_state"] },
+        "status_ref": { "type": "string", "minLength": 1, "maxLength": 160 },
+        "freshness_bucket": { "type": "string", "pattern": "^([0-9]{4}-[0-9]{2}-[0-9]{2}|[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:00Z)$" },
+        "live_issuer_callback_allowed": { "const": false }
+      }
+    },
+    "proof_format_ref": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["proof_family", "profile_id", "correlation_scope"],
+      "properties": {
+        "proof_family": { "enum": ["openid4vp", "sd_jwt_vc", "mdoc", "bbs", "cl_signature", "zk_profile", "other_governed"] },
+        "profile_id": { "type": "string", "minLength": 1, "maxLength": 160 },
+        "profile_version": { "type": "string", "pattern": "^[0-9]+\\.[0-9]+(?:\\.[0-9]+)?$" },
+        "correlation_scope": { "enum": ["none", "verifier_transaction", "verifier_scoped"] }
+      }
+    }
   }
 }
